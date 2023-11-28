@@ -13,29 +13,30 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   bool poweron = true;
-  final String cgiScriptUrl = 'http://127.0.0.1/scripts/test.py';
+  final String cgiScriptUrl = 'http://192.168.1.36/scripts/test.py';
   String fileName = 'work-mode.json';
 
   void switchLights(poweron) async {
-    final path = Directory.current.path;
-    File filePath = File('$path/assets/$fileName');
+    //final path = Directory.current.path;
+    //File filePath = File('$path/assets/$fileName');
     try {
-      String jsonString = await readJsonFile(filePath);
-      Map<String, dynamic> jsonData = parseJson(jsonString);
+      //String jsonString = await readJsonFile(filePath);
+      final String jsonString;
       if (poweron == true) {
-        editJson(jsonData, 'core', jsonDecode(off));
+        jsonString = off;
       } else {
-        editJson(jsonData, 'core', jsonDecode(on));
+        jsonString = on;
       }
 
       //await http.get(Uri.parse(cgiScriptUrl));
-      await http.post(
+      final response = await http.post(
         Uri.parse(cgiScriptUrl),
         headers: {
           'Content-Type': 'application/json',
         },
-        body: json.encode(jsonData),
+        body: jsonString,
       );
+      print(response.body);
       //await writeJsonFile(filePath, json.encode(jsonData));
       print('JSON file edited successfully.');
     } catch (e) {
@@ -68,7 +69,7 @@ class _MainScreenState extends State<MainScreen> {
                   poweron = !poweron;
                 });
               },
-              child: Text(poweron ? textApagar: textEncender),
+              child: Text(poweron ? textApagar : textEncender),
             ),
           ],
         ),
@@ -90,6 +91,8 @@ String textEncender = "Endencer!";
 
 String on = '''
 {
+  "core":
+  {
     "mode": "fill",
     "args":
     {
@@ -97,12 +100,16 @@ String on = '''
       "g": 100,
       "b": 100
     }
+  }
 }
 ''';
 
 String off = '''
 {
+  "core":
+  {
     "mode": "off"
+  }
 }
 ''';
 
