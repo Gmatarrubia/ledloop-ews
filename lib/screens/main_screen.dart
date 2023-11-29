@@ -13,8 +13,9 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   bool poweron = true;
-  final String cgiScriptUrl = 'http://192.168.1.36/scripts/test.py';
+  final String cgiScriptUrl = 'http://ideafix.local/scripts/test.py';
   String fileName = 'work-mode.json';
+  String myText = "";
 
   void switchLights(poweron) async {
     //final path = Directory.current.path;
@@ -36,6 +37,7 @@ class _MainScreenState extends State<MainScreen> {
         },
         body: jsonString,
       );
+      myText = response.body;
       print(response.body);
       //await writeJsonFile(filePath, json.encode(jsonData));
       print('JSON file edited successfully.');
@@ -71,6 +73,7 @@ class _MainScreenState extends State<MainScreen> {
               },
               child: Text(poweron ? textApagar : textEncender),
             ),
+            Text(myText)
           ],
         ),
       ),
