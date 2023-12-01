@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
 import 'package:http/http.dart' as http;
 import 'dart:io';
 import 'dart:convert';
@@ -13,15 +12,12 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   bool poweron = true;
-  final String cgiScriptUrl = 'http://ideafix.local/scripts/test.py';
+  final String cgiScriptUrl = 'http://ideafix.local/scripts/comm-ledloop.py';
   String fileName = 'work-mode.json';
   String myText = "";
 
   void switchLights(poweron) async {
-    //final path = Directory.current.path;
-    //File filePath = File('$path/assets/$fileName');
     try {
-      //String jsonString = await readJsonFile(filePath);
       final String jsonString;
       if (poweron == true) {
         jsonString = off;
@@ -29,7 +25,6 @@ class _MainScreenState extends State<MainScreen> {
         jsonString = on;
       }
 
-      //await http.get(Uri.parse(cgiScriptUrl));
       final response = await http.post(
         Uri.parse(cgiScriptUrl),
         headers: {
@@ -38,8 +33,7 @@ class _MainScreenState extends State<MainScreen> {
         body: jsonString,
       );
       myText = response.body;
-      print(response.body);
-      //await writeJsonFile(filePath, json.encode(jsonData));
+      //print(response.body);
       print('JSON file edited successfully.');
     } catch (e) {
       print('Error: $e');
