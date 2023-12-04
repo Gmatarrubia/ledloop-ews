@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:io';
-import 'dart:convert';
+import 'package:ews_ledloop/resources/led_work.modes.dart';
+import 'package:ews_ledloop/services/api_service.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key, required this.title});
@@ -12,32 +11,16 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   bool poweron = true;
-  final String cgiScriptUrl = 'http://ideafix.local/scripts/comm-ledloop.py';
-  String fileName = 'work-mode.json';
   String myText = "";
+  final ApiService api = ApiService();
 
-  void switchLights(poweron) async {
-    try {
-      final String jsonString;
-      if (poweron == true) {
-        jsonString = off;
-      } else {
-        jsonString = on;
-      }
-
-      final response = await http.post(
-        Uri.parse(cgiScriptUrl),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonString,
-      );
-      myText = response.body;
-      //print(response.body);
-      print('JSON file edited successfully.');
-    } catch (e) {
-      print('Error: $e');
+  Future<String> switchLights(poweron) async {
+    if (poweron == true) {
+      myText = await api.setConfiguration(off);
+    } else {
+      myText = await api.setConfiguration(on);
     }
+    return myText;
   }
 
   @override
@@ -49,21 +32,22 @@ class _MainScreenState extends State<MainScreen> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             ElevatedButton(
               style: ButtonStyle(
+                backgroundColor:
+                    const MaterialStatePropertyAll<Color>(Colors.amber),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                 ),
               ),
-              onPressed: () {
-                setState(() {
-                  switchLights(poweron);
-                  poweron = !poweron;
-                });
+              onPressed: () async {
+                myText = await switchLights(poweron);
+                poweron = !poweron;
+                setState(() {});
               },
               child: Text(poweron ? textApagar : textEncender),
             ),
@@ -73,51 +57,4 @@ class _MainScreenState extends State<MainScreen> {
       ),
     );
   }
-}
-
-Future<String> readJsonFile(File file) async {
-  if (await file.exists()) {
-    return await file.readAsString();
-  } else {
-    throw Exception("File not found");
-  }
-}
-
-String textApagar = "Apagar!";
-String textEncender = "Endencer!";
-
-String on = '''
-{
-  "core":
-  {
-    "mode": "fill",
-    "args":
-    {
-      "r": 100,
-      "g": 100,
-      "b": 100
-    }
-  }
-}
-''';
-
-String off = '''
-{
-  "core":
-  {
-    "mode": "off"
-  }
-}
-''';
-
-Map<String, dynamic> parseJson(String jsonString) {
-  return json.decode(jsonString);
-}
-
-void editJson(Map<String, dynamic> jsonData, String key, dynamic newValue) {
-  jsonData[key] = newValue;
-}
-
-Future<void> writeJsonFile(File file, String jsonString) async {
-  await file.writeAsString(jsonString);
 }
