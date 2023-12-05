@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:convert';
 
-String get_base_url() {
+String getBaseUrl() {
   if (kIsWeb) {
     return '';
   } else {
@@ -13,25 +13,36 @@ String get_base_url() {
 class ApiService {
   var client = http.Client();
   static String scriptPath = "/scripts";
-  final String setScript = "$scriptPath/setConfigScript.py";
+  String getConfigScript = "$scriptPath/get-config.py";
+  String getInfoScript = "$scriptPath/get-info.py";
   //Todo: Replace the following
-  //final String getScript = scriptPath + "/getConfigScript.py"; //good
-  final String getScript = "$scriptPath/comm-ledloop.py";  //bad
+  //final final String setScript = "$scriptPath/set-config.py"; //good
+  final String setScript = "$scriptPath/comm-ledloop.py";  //bad
 
   // GET
   Future<dynamic> getConfiguration() async {
-    var url = Uri.parse(get_base_url() + getScript);
+    var url = Uri.parse(getBaseUrl() + getConfigScript);
     var response = await client.get(url);
     if (response.statusCode == 200) {
-      return "Éxito";
-    } else {
       return response.body;
+    } else {
+      return response.statusCode.toString();
+    }
+  }
+
+    Future<String> getInfo() async {
+    var url = Uri.parse(getBaseUrl() + getInfoScript);
+    var response = await client.get(url);
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return response.statusCode.toString();
     }
   }
 
   // Post
   Future<dynamic> setConfiguration(String newConfig) async {
-    var url = Uri.parse(get_base_url() + getScript);
+    var url = Uri.parse(getBaseUrl() + setScript);
     var response = await http.post(url,
         headers: {
           'Content-Type': 'application/json',

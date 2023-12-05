@@ -11,15 +11,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    const String title = "Ledloop Control";
     return MaterialApp(
-      title: 'Ledloop Control',
+      title: title,
       theme: ThemeData(
         brightness: Brightness.light,
         visualDensity: VisualDensity.adaptivePlatformDensity,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
         useMaterial3: true,
       ),
-      home: const MainScreen(title: 'Ledloop Control'),
+      home: const MainScreen(title: title),
     );
   }
 }

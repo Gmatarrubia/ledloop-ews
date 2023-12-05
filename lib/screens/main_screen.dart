@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ews_ledloop/resources/led_work.modes.dart';
 import 'package:ews_ledloop/services/api_service.dart';
+import 'package:ews_ledloop/ui_elements/work_mode_botton.dart';
+import 'package:ews_ledloop/model/figures.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key, required this.title});
@@ -12,7 +14,9 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   bool poweron = true;
   String myText = "";
+  String bottomText = "Switch leds";
   final ApiService api = ApiService();
+  late FiguresModel figuresModel;
 
   Future<String> switchLights(poweron) async {
     if (poweron == true) {
@@ -23,33 +27,31 @@ class _MainScreenState extends State<MainScreen> {
     return myText;
   }
 
+  Future<String> getState() async {
+    figuresModel = FiguresModel.fromJson( await api.getInfo());
+    return "Switch leds";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        centerTitle: true,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor:
-                    const MaterialStatePropertyAll<Color>(Colors.amber),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                ),
-              ),
-              onPressed: () async {
+            WorkModeBotton(
+              bottonText: bottomText,
+              onTap: () async {
                 myText = await switchLights(poweron);
+                bottomText = await getState();
                 poweron = !poweron;
                 setState(() {});
               },
-              child: Text(poweron ? textApagar : textEncender),
             ),
             Text(myText)
           ],
