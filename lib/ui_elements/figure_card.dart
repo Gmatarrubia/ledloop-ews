@@ -13,11 +13,11 @@ class FigureCard extends StatefulWidget {
 }
 
 class _FigureCardState extends State<FigureCard> {
-
   Future<String> switchOnLights() async {
     var response = await widget.api.setConfiguration(on);
     return response;
   }
+
   Future<String> switchOffLights() async {
     var response = await widget.api.setConfiguration(off);
     return response;
@@ -26,23 +26,36 @@ class _FigureCardState extends State<FigureCard> {
   @override
   Widget build(BuildContext context) {
     String bottomResponse = "";
-    return Row(
-      children: [
-        WorkModeBotton(
-              bottonText: "Encender",
-              onTap: () async {
-                bottomResponse = await switchOnLights();
-                setState(() {});
-              },
-        ),
-        WorkModeBotton(
-              bottonText: "Apagar",
-              onTap: () async {
-                bottomResponse = await switchOffLights();
-                setState(() {});
-              },
-        ),
-      ],
+    return Card(
+      color: Colors.tealAccent,
+      child: Column(
+        children: [
+          Text(widget.figure.name),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              WorkModeBotton(
+                bottonText: "Encender",
+                onTap: () async {
+                  bottomResponse = await switchOnLights();
+                  setState(() {});
+                },
+              ),
+              const SizedBox(
+                width: 20,
+                height: 40,
+              ),
+              WorkModeBotton(
+                bottonText: "Apagar",
+                onTap: () async {
+                  bottomResponse = await switchOffLights();
+                  setState(() {});
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
