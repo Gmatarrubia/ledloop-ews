@@ -3,18 +3,17 @@ import 'dart:convert';
 class Mode {
   String name;
   int nargs;
-  var args = List.empty();
+  List<String> args;
 
   Mode({required this.name, required this.nargs, required this.args});
 
   factory Mode.fromJson(Map<String, dynamic> json) {
     return Mode(
       name: json['name'],
-      nargs: json['nargs'].toInt(),
-      args: json['args'],
+      nargs: json['nargs'],
+      args: List<String>.from(json['args']),
     );
   }
-
   Map<String, dynamic> toJson() {
     return {
       'name': name,
@@ -26,18 +25,24 @@ class Mode {
 
 class Figure {
   String name;
-  List<Mode> modes = List.empty();
+  List<Mode> modes;
 
   Figure({required this.name, required this.modes});
 
   factory Figure.fromJson(Map<String, dynamic> json) {
-    return Figure(name: json[0], modes: json[1]);
+    List<dynamic> jsonModes = json['modes'];
+    List<Mode> modes = jsonModes.map((json) => Mode.fromJson(json)).toList();
+
+    return Figure(
+      name: json['name'],
+      modes: modes,
+    );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'modes': modes,
+      'modes': modes.map((mode) => mode.toJson()).toList(),
     };
   }
 }
@@ -48,18 +53,16 @@ class FiguresModel {
   FiguresModel({required this.figures});
 
   factory FiguresModel.fromJson(String jsonStr) {
-    Map<String, dynamic> jsonMap = json.decode(jsonStr);
-    List<Figure> figures = jsonMap.forEach((key, value) {
-      var myMap = Map<String, dynamic>();
-      myMap[key] = value;
-      return Figure.fromJson(myMap);
-    });
+    Map<String, dynamic> jsonData = json.decode(jsonStr);
+    List<dynamic> jsonFigures = jsonData['figures'];
+    List<Figure> figures = jsonFigures.map((json) => Figure.fromJson(json)).toList();
+
     return FiguresModel(figures: figures);
   }
 
   String toJson() {
-    List<Map<String, dynamic>> jsonList =
-        figures.map((figure) => figure.toJson()).toList();
-    return json.encode(jsonList);
+    return json.encode({
+      'figures': figures.map((figure) => figure.toJson()).toList(),
+    });
   }
 }
