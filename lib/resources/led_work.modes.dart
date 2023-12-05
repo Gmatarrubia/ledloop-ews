@@ -1,9 +1,18 @@
-String textApagar = "Apagar!";
-String textEncender = "Endencer!";
+import 'dart:convert';
 
-String on = '''
+class FigureWorkMode {
+  String figureName;
+  late String stringOn;
+  late String stringOff;
+  FigureWorkMode(this.figureName) {
+    stringOn = setStringOn(figureName);
+    stringOff = setStringOff(figureName);
+  }
+
+  String setStringOn(String figureName) {
+    return '''
 {
-  "core":
+  "$figureName":
   {
     "mode": "fill",
     "args":
@@ -15,12 +24,16 @@ String on = '''
   }
 }
 ''';
+  }
 
-String off = '''
+  String setStringOff(String figureName) {
+    return '''
 {
-  "core":
+  "$figureName":
   {
     "mode": "off"
   }
 }
 ''';
+  }
+}

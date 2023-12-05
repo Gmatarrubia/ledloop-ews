@@ -14,12 +14,15 @@ class FigureCard extends StatefulWidget {
 
 class _FigureCardState extends State<FigureCard> {
   Future<String> switchOnLights() async {
-    var response = await widget.api.setConfiguration(on);
+    var response = await widget.api.setConfiguration(
+      FigureWorkMode(widget.figure.name).stringOn);
     return response;
   }
 
   Future<String> switchOffLights() async {
-    var response = await widget.api.setConfiguration(off);
+
+    var response = await widget.api.setConfiguration(
+      FigureWorkMode(widget.figure.name).stringOff);
     return response;
   }
 
