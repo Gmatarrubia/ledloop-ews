@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ews_ledloop/resources/ui_constants.dart';
 
 class WorkModeBotton extends StatelessWidget {
   const WorkModeBotton({
@@ -12,17 +13,23 @@ class WorkModeBotton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      style: ButtonStyle(
-        backgroundColor: const MaterialStatePropertyAll<Color>(Colors.amber),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: const MaterialStatePropertyAll<Color>(Colors.amber),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
           ),
         ),
+        onPressed: onTap,
+        child: Text(
+          bottonText.capitalize(),
+          style: kTextBottomStyle,
+        ),
       ),
-      onPressed: onTap,
-      child: Text(bottonText),
     );
   }
 }

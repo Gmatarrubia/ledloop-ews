@@ -3,6 +3,7 @@ import 'package:ews_ledloop/services/api_service.dart';
 import 'package:ews_ledloop/resources/led_work.modes.dart';
 import 'package:ews_ledloop/model/figures.dart';
 import 'package:ews_ledloop/ui_elements/work_mode_botton.dart';
+import 'package:ews_ledloop/resources/ui_constants.dart';
 
 class FigureCard extends StatefulWidget {
   const FigureCard({super.key, required this.figure, required this.api});
@@ -33,7 +34,11 @@ class _FigureCardState extends State<FigureCard> {
       color: Colors.tealAccent,
       child: Column(
         children: [
-          Text(widget.figure.name),
+          Center(
+            child: Text(widget.figure.name.capitalize(),
+              style: kTextCardStyle
+              ),
+            ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
