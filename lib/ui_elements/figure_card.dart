@@ -15,15 +15,14 @@ class FigureCard extends StatefulWidget {
 
 class _FigureCardState extends State<FigureCard> {
   Future<String> switchOnLights() async {
-    var response = await widget.api.setConfiguration(
-      FigureWorkMode(widget.figure.name).stringOn);
+    var response = await widget.api
+        .setConfiguration(FigureWorkMode(widget.figure.name).stringOn);
     return response;
   }
 
   Future<String> switchOffLights() async {
-
-    var response = await widget.api.setConfiguration(
-      FigureWorkMode(widget.figure.name).stringOff);
+    var response = await widget.api
+        .setConfiguration(FigureWorkMode(widget.figure.name).stringOff);
     return response;
   }
 
@@ -31,14 +30,17 @@ class _FigureCardState extends State<FigureCard> {
   Widget build(BuildContext context) {
     String bottomResponse = "";
     return Card(
-      color: Colors.tealAccent,
+      color: appTheme.cardTheme.color!,
       child: Column(
         children: [
-          Center(
-            child: Text(widget.figure.name.capitalize(),
-              style: kTextCardStyle
-              ),
+          Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
+            child: Text(
+              widget.figure.name.capitalize(),
+              style: appTheme.textTheme.displayLarge,
             ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

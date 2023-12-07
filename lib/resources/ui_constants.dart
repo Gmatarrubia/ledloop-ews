@@ -1,28 +1,39 @@
 import 'package:flutter/material.dart';
 
-const Color kBackgroundColor = Colors.black;
-const Color kCardBackgroundColor = Color(0xFF90A4A3);
-const Color kBottomBackgroundColor = Color(0xFF90A4A3);
-
 const Color kTextColor = Color.fromARGB(255, 27, 27, 27);
-const int kBoxBackgroundAlpha = 200;
-
-const kTextAppbarStyle = TextStyle(
-  fontSize: 25.0,
-  fontFamily: 'nonito-semibold',
-  color: kTextColor,
+ColorScheme myColorScheme = ColorScheme.fromSeed(
+    seedColor: Colors.teal,
+    background: Colors.black54,
 );
 
-const kTextCardStyle = TextStyle(
-  fontSize: 20.0,
-  fontFamily: 'nonito-semibold',
-  color: kTextColor,
-);
-
-const kTextBottomStyle = TextStyle(
-  fontSize: 15.0,
-  fontFamily: 'nonito',
-  color: kTextColor,
+ThemeData appTheme = ThemeData(
+  brightness: Brightness.light,
+  useMaterial3: true,
+  visualDensity: VisualDensity.adaptivePlatformDensity,
+  colorScheme: myColorScheme,
+  textTheme: const TextTheme(
+    titleLarge: TextStyle(
+        fontSize: 25, fontFamily: 'nonito-semibold', color: kTextColor),
+    displayLarge: TextStyle(
+        fontSize: 20, fontFamily: 'nonito-semibold', color: kTextColor),
+    displayMedium:
+        TextStyle(fontSize: 15, fontFamily: 'nonito', color: kTextColor),
+  ),
+  appBarTheme: const AppBarTheme(
+    //color: inversePrimary,
+    backgroundColor: Colors.teal,
+    iconTheme: IconThemeData(color: Colors.white),
+    centerTitle: true,
+    titleTextStyle: TextStyle(
+        fontSize: 25, fontFamily: 'nonito-semibold', color: kTextColor),
+  ),
+  buttonTheme: ButtonThemeData(
+    colorScheme: myColorScheme,
+    textTheme: ButtonTextTheme.normal,
+  ),
+  cardTheme: CardTheme(
+    color: myColorScheme.primary,
+  )
 );
 
 extension StringExtensions on String {

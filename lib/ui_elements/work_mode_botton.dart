@@ -17,7 +17,13 @@ class WorkModeBotton extends StatelessWidget {
       padding: const EdgeInsets.all(8.0),
       child: ElevatedButton(
         style: ButtonStyle(
-          backgroundColor: const MaterialStatePropertyAll<Color>(Colors.amber),
+          backgroundColor: MaterialStateColor.resolveWith((states) {
+            if (states.contains(MaterialState.pressed)) {
+              return appTheme.buttonTheme.colorScheme!.secondary;
+            } else {
+              return appTheme.buttonTheme.colorScheme!.inversePrimary;
+            }
+          }),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -27,7 +33,8 @@ class WorkModeBotton extends StatelessWidget {
         onPressed: onTap,
         child: Text(
           bottonText.capitalize(),
-          style: kTextBottomStyle,
+          style: appTheme.textTheme.displayMedium,
+          textAlign: TextAlign.center,
         ),
       ),
     );

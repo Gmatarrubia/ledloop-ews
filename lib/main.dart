@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ews_ledloop/screens/main_screen.dart';
+import 'package:ews_ledloop/resources/ui_constants.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,12 +15,7 @@ class MyApp extends StatelessWidget {
     const String title = "Ledloop Control";
     return MaterialApp(
       title: title,
-      theme: ThemeData(
-        brightness: Brightness.light,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
-        useMaterial3: true,
-      ),
+      theme: appTheme,
       home: const MainScreen(title: title),
     );
   }

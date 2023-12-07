@@ -22,7 +22,7 @@ class _FiguresViewState extends State<FiguresView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: kBackgroundColor,
+      color: appTheme.colorScheme.background,
       child: FutureBuilder(
           future: getState(),
           builder: (context, AsyncSnapshot<FiguresModel> figuresModel) {

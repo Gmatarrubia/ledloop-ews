@@ -9,10 +9,8 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(title,
-          style: kTextCardStyle,
-        ),
+        title: Text(title),
+        titleTextStyle: appTheme.appBarTheme.titleTextStyle,
         centerTitle: true,
       ),
       body: const Center(
