@@ -1,0 +1,57 @@
+{
+  "figures": [
+    {
+      "name": "complete",
+      "modes": [
+        {
+          "name": "snake",
+          "nargs": 3,
+          "args": [
+            "Color",
+            "Color",
+            "speed"
+          ]
+        },
+        {
+          "name": "off",
+          "nargs": 0,
+          "args": []
+        },
+        {
+          "name": "snake",
+          "nargs": 3,
+          "args": [
+            "Color",
+            "Color",
+            "speed"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "core",
+      "modes": [
+        {
+          "name": "fill",
+          "nargs": 1,
+          "args": [
+            "color"
+          ]
+        },
+        {
+          "name": "off",
+          "nargs": 0,
+          "args": []
+        },
+        {
+          "name": "pulse",
+          "nargs": 3,
+          "args": [
+            "Color",
+            "speed"
+          ]
+        }
+      ]
+    }
+  ]
+}

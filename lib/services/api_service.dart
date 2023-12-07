@@ -1,6 +1,9 @@
 import 'package:http/http.dart' as http;
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'dart:convert';
+import 'package:ews_ledloop/services/api_service_debug.dart';
+
+// Set true for offline API calls.
+const bool kDebugOffLine = false;
 
 String getBaseUrl() {
   if (kIsWeb) {
@@ -17,7 +20,7 @@ class ApiService {
   String getInfoScript = "$scriptPath/get-info.py";
   //Todo: Replace the following
   //final final String setScript = "$scriptPath/set-config.py"; //good
-  final String setScript = "$scriptPath/comm-ledloop.py";  //bad
+  final String setScript = "$scriptPath/comm-ledloop.py"; //bad
 
   // GET
   Future<dynamic> getConfiguration() async {
@@ -30,7 +33,12 @@ class ApiService {
     }
   }
 
-    Future<String> getInfo() async {
+  Future<String> getInfo() async {
+    //Return offline if kDebugOffLine is true
+    if (kDebugOffLine) {
+      return readFiguresModeFile();
+    }
+
     var url = Uri.parse(getBaseUrl() + getInfoScript);
     var response = await client.get(url);
     if (response.statusCode == 200) {
@@ -42,13 +50,20 @@ class ApiService {
 
   // Post
   Future<dynamic> setConfiguration(String newConfig) async {
+    //Return offline if kDebugOffLine is true
+    if (kDebugOffLine) {
+      writeWorkModeFile(newConfig);
+      return "Éxito";
+    }
+
     var url = Uri.parse(getBaseUrl() + setScript);
-    var response = await http.post(url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: newConfig,
-      );
+    var response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: newConfig,
+    );
     if (response.statusCode == 200) {
       return "Éxito";
     } else {
@@ -56,4 +71,3 @@ class ApiService {
     }
   }
 }
-
