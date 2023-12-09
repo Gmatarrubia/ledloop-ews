@@ -24,6 +24,11 @@ class ApiService {
 
   // GET
   Future<dynamic> getConfiguration() async {
+    // Return offline if kDebugOffLine is true
+    if (kDebugOffLine) {
+      return readWorkModeFile();
+    }
+
     var url = Uri.parse(getBaseUrl() + getConfigScript);
     var response = await client.get(url);
     if (response.statusCode == 200) {

@@ -10,6 +10,10 @@ Future<String> readFiguresModeFile() async {
   return readJsonFile(figuresModeJson);
 }
 
+Future<String> readWorkModeFile() async {
+  return readJsonFile(workModeJson);
+}
+
 void writeWorkModeFile(String jsonData) async {
   await writeJsonFile(workModeJson, jsonData);
 }

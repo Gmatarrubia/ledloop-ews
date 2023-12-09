@@ -23,58 +23,66 @@ class _FiguresViewState extends State<FiguresView> {
   Widget build(BuildContext context) {
     return Container(
       color: appTheme.colorScheme.background,
-      child: FutureBuilder(
-          future: getState(),
-          builder: (context, AsyncSnapshot<FiguresModel> figuresModel) {
-            if (figuresModel.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: SizedBox(
-                  height: 150,
-                  width: 150,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 10.0,
-                    backgroundColor: Colors.black54,
-                    color: Colors.tealAccent,
-                  ),
-                ),
-              );
-            } else if (figuresModel.hasError) {
-              return Center(
-                child: Text('Error: ${figuresModel.error}'),
-              );
-            } else {
-              FiguresModel myFiguresModel = figuresModel.data!;
-              return Center(
-                child: Container(
-                  padding: const EdgeInsets.all(12),
-                  alignment: Alignment.center,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: myFiguresModel.figures.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            padding: const EdgeInsets.all(12),
-                            alignment: Alignment.center,
-                            child: FigureCard(
-                              figure: myFiguresModel.figures[index],
-                              api: api,
-                            ),
-                          );
-                        },
+      child: Column(
+        children: [
+          FutureBuilder(
+              future: getState(),
+              builder: (context, AsyncSnapshot<FiguresModel> figuresModel) {
+                if (figuresModel.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: SizedBox(
+                      height: 150,
+                      width: 150,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 10.0,
+                        backgroundColor: Colors.black54,
+                        color: Colors.tealAccent,
                       ),
-                      Text(myText)
-                    ],
-                  ),
-                ),
-              );
-            }
-          }),
+                    ),
+                  );
+                } else if (figuresModel.hasError) {
+                  return Center(
+                    child: Text('Error: ${figuresModel.error}'),
+                  );
+                } else {
+                  FiguresModel myFiguresModel = figuresModel.data!;
+                  return Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: myFiguresModel.figures.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 3.0,
+                                  horizontal: 12.0
+                                ),
+                                alignment: Alignment.center,
+                                child: FigureCard(
+                                  figure: myFiguresModel.figures[index],
+                                  api: api,
+                                ),
+                              );
+                            },
+                          ),
+                          Text(myText)
+                        ],
+                      ),
+                    ),
+                  );
+                }
+              }),
+          const ElevatedButton(onPressed: null, child: Text("Aplicar"))
+        ],
+      ),
     );
   }
 }

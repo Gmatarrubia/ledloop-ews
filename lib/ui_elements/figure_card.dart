@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ews_ledloop/services/api_service.dart';
 import 'package:ews_ledloop/resources/led_work.modes.dart';
 import 'package:ews_ledloop/model/figures.dart';
-import 'package:ews_ledloop/ui_elements/work_mode_botton.dart';
+import 'package:ews_ledloop/ui_elements/pick_color_button.dart';
 import 'package:ews_ledloop/resources/ui_constants.dart';
 
 class FigureCard extends StatefulWidget {
@@ -14,6 +14,8 @@ class FigureCard extends StatefulWidget {
 }
 
 class _FigureCardState extends State<FigureCard> {
+  String activeFigureMode = "off";
+
   Future<String> switchOnLights() async {
     var response = await widget.api
         .setConfiguration(FigureWorkMode(widget.figure.name).stringOn);
@@ -26,9 +28,27 @@ class _FigureCardState extends State<FigureCard> {
     return response;
   }
 
+  List<String> getModesNames() {
+    List<String> modeNames = [];
+    for (final mode in widget.figure.modes) {
+      modeNames.add(mode.name);
+    }
+    return modeNames;
+  }
+
+  void getCurrentMode() async {
+    var currentWork = await widget.api.getConfiguration();
+    activeFigureMode = currentWork[widget.figure.name];
+  }
+
+  void updateActiveFigureMode(String newMode) {
+    setState(() {
+      activeFigureMode = newMode;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    String bottomResponse = "";
     return Card(
       color: appTheme.cardTheme.color!,
       child: Column(
@@ -41,27 +61,27 @@ class _FigureCardState extends State<FigureCard> {
               style: appTheme.textTheme.displayLarge,
             ),
           ),
-          Row(
+          DropdownButton<String>(
+            style: appTheme.dropdownMenuTheme.textStyle,
+            value: activeFigureMode,
+            isExpanded: true,
+            onChanged: ((String? value) => updateActiveFigureMode(value!)),
+            items:
+                getModesNames().map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Center(
+                  child: Text(value),
+                ),
+              );
+            }).toList(),
+          ),
+          const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              WorkModeBotton(
-                bottonText: "Encender",
-                onTap: () async {
-                  bottomResponse = await switchOnLights();
-                  setState(() {});
-                },
-              ),
-              const SizedBox(
-                width: 20,
-                height: 40,
-              ),
-              WorkModeBotton(
-                bottonText: "Apagar",
-                onTap: () async {
-                  bottomResponse = await switchOffLights();
-                  setState(() {});
-                },
-              ),
+              PickColorButton(enabled: true),
+              PickColorButton(enabled: false),
+              PickColorButton(enabled: false),
             ],
           ),
         ],

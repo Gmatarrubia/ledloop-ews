@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 const Color kTextColor = Color.fromARGB(255, 27, 27, 27);
 ColorScheme myColorScheme = ColorScheme.fromSeed(
-    seedColor: Colors.teal,
-    background: Colors.black54,
+  seedColor: Colors.teal,
+  background: Colors.black54,
 );
 
 ThemeData appTheme = ThemeData(
@@ -33,7 +33,14 @@ ThemeData appTheme = ThemeData(
   ),
   cardTheme: CardTheme(
     color: myColorScheme.primary,
-  )
+  ),
+  dropdownMenuTheme: const DropdownMenuThemeData(
+    textStyle: TextStyle(
+        fontSize: 15,
+        fontFamily: 'nonito',
+        color: Colors.white,
+    ),
+  ),
 );
 
 extension StringExtensions on String {
