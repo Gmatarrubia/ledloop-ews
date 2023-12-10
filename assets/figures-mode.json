@@ -23,6 +23,11 @@
             "Color",
             "speed"
           ]
+        },
+        {
+          "name": "rainbow",
+          "nargs": 0,
+          "args": []
         }
       ]
     },
