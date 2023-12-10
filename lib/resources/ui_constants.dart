@@ -28,17 +28,19 @@ ThemeData appTheme = ThemeData(
         fontSize: 25, fontFamily: 'nonito-semibold', color: kTextColor),
   ),
   buttonTheme: ButtonThemeData(
-    colorScheme: myColorScheme,
-    textTheme: ButtonTextTheme.normal,
+    colorScheme: myColorScheme.copyWith(
+      primary: Colors.blue,
+    ),
+    textTheme: ButtonTextTheme.primary,
   ),
   cardTheme: CardTheme(
     color: myColorScheme.primary,
   ),
   dropdownMenuTheme: const DropdownMenuThemeData(
     textStyle: TextStyle(
-        fontSize: 15,
-        fontFamily: 'nonito',
-        color: Colors.white,
+      fontSize: 15,
+      fontFamily: 'nonito',
+      color: Colors.white,
     ),
   ),
 );

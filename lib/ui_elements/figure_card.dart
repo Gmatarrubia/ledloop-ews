@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:ews_ledloop/services/api_service.dart';
 import 'package:ews_ledloop/resources/led_work.modes.dart';
@@ -15,18 +17,8 @@ class FigureCard extends StatefulWidget {
 
 class _FigureCardState extends State<FigureCard> {
   String activeFigureMode = "off";
-
-  Future<String> switchOnLights() async {
-    var response = await widget.api
-        .setConfiguration(FigureWorkMode(widget.figure.name).stringOn);
-    return response;
-  }
-
-  Future<String> switchOffLights() async {
-    var response = await widget.api
-        .setConfiguration(FigureWorkMode(widget.figure.name).stringOff);
-    return response;
-  }
+  List<Color> colorsOfMode = [Colors.black, Colors.black, Colors.black];
+  int localNargs = 0;
 
   List<String> getModesNames() {
     List<String> modeNames = [];
@@ -36,15 +28,37 @@ class _FigureCardState extends State<FigureCard> {
     return modeNames;
   }
 
-  void getCurrentMode() async {
-    var currentWork = await widget.api.getConfiguration();
-    activeFigureMode = currentWork[widget.figure.name];
+  Future<String> getCurrentMode() async {
+    Map<String, dynamic> currentWork =
+        json.decode(await widget.api.getConfiguration());
+    return await currentWork[widget.figure.name]["mode"];
   }
 
-  void updateActiveFigureMode(String newMode) {
+  void updateActiveFigureMode(String newMode) async {
+    await widget.api.setConfiguration(
+        FigureWorkMode(widget.figure.name, newMode, colorsOfMode)
+            .stringWorkMode);
     setState(() {
       activeFigureMode = newMode;
+      for (final mode in widget.figure.modes) {
+        if (mode.name == activeFigureMode) {
+          localNargs = mode.nargs;
+        }
+      }
     });
+  }
+
+  void updateFigureColor(Color newColor) async {
+    List<Color> activeArgs = [];
+    //for (int i = 0; i < localNargs; i++) {
+    //  activeArgs.add(colorsOfMode[i]);
+    //}
+    colorsOfMode[0] = newColor;
+    activeArgs.add(newColor);
+    await widget.api.setConfiguration(
+        FigureWorkMode(widget.figure.name, activeFigureMode, activeArgs)
+            .stringWorkMode);
+    setState(() {});
   }
 
   @override
@@ -61,27 +75,45 @@ class _FigureCardState extends State<FigureCard> {
               style: appTheme.textTheme.displayLarge,
             ),
           ),
-          DropdownButton<String>(
-            style: appTheme.dropdownMenuTheme.textStyle,
-            value: activeFigureMode,
-            isExpanded: true,
-            onChanged: ((String? value) => updateActiveFigureMode(value!)),
-            items:
-                getModesNames().map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Center(
-                  child: Text(value),
-                ),
-              );
-            }).toList(),
-          ),
-          const Row(
+          FutureBuilder(
+              future: getCurrentMode(),
+              builder: (context, AsyncSnapshot<String> currentMode) {
+                if (currentMode.connectionState == ConnectionState.waiting) {
+                  return const Text("Cargando..");
+                } else {
+                  return DropdownButton<String>(
+                    style: appTheme.dropdownMenuTheme.textStyle,
+                    value: currentMode.data,
+                    isExpanded: true,
+                    onChanged: ((String? value) =>
+                        updateActiveFigureMode(value!)),
+                    items: getModesNames()
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Center(
+                          child: Text(value),
+                        ),
+                      );
+                    }).toList(),
+                  );
+                }
+              }),
+          Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              PickColorButton(enabled: true),
-              PickColorButton(enabled: false),
-              PickColorButton(enabled: false),
+              PickColorButton(
+                  enabled: localNargs > 0,
+                  updateState: updateFigureColor,
+                  startColor: colorsOfMode[0]),
+              PickColorButton(
+                  enabled: localNargs > 1,
+                  updateState: updateFigureColor,
+                  startColor: colorsOfMode[1]),
+              PickColorButton(
+                  enabled: localNargs > 2,
+                  updateState: updateFigureColor,
+                  startColor: colorsOfMode[2]),
             ],
           ),
         ],

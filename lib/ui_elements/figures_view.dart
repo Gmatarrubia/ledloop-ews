@@ -12,18 +12,21 @@ class FiguresView extends StatefulWidget {
 }
 
 class _FiguresViewState extends State<FiguresView> {
-  String myText = "";
   final ApiService api = ApiService();
 
   Future<FiguresModel> getState() async {
     return FiguresModel.fromJson(await api.getInfo());
   }
 
+  FiguresModel myFiguresModel = FiguresModel.fromJson('{"figures":[]}');
   @override
   Widget build(BuildContext context) {
     return Container(
       color: appTheme.colorScheme.background,
-      child: Column(
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        fit: StackFit.loose,
+        textDirection: TextDirection.ltr,
         children: [
           FutureBuilder(
               future: getState(),
@@ -45,7 +48,7 @@ class _FiguresViewState extends State<FiguresView> {
                     child: Text('Error: ${figuresModel.error}'),
                   );
                 } else {
-                  FiguresModel myFiguresModel = figuresModel.data!;
+                  myFiguresModel = figuresModel.data!;
                   return Center(
                     child: Container(
                       padding: const EdgeInsets.all(12),
@@ -62,9 +65,7 @@ class _FiguresViewState extends State<FiguresView> {
                             itemBuilder: (context, index) {
                               return Container(
                                 padding: const EdgeInsets.symmetric(
-                                  vertical: 3.0,
-                                  horizontal: 12.0
-                                ),
+                                    vertical: 3.0, horizontal: 12.0),
                                 alignment: Alignment.center,
                                 child: FigureCard(
                                   figure: myFiguresModel.figures[index],
@@ -73,16 +74,43 @@ class _FiguresViewState extends State<FiguresView> {
                               );
                             },
                           ),
-                          Text(myText)
                         ],
                       ),
                     ),
                   );
                 }
               }),
-          const ElevatedButton(onPressed: null, child: Text("Aplicar"))
+          //ApplyBottom(myFiguresModel: myFiguresModel),
         ],
       ),
+    );
+  }
+}
+
+class ApplyBottom extends StatelessWidget {
+  const ApplyBottom({
+    super.key,
+    required this.myFiguresModel,
+  });
+
+  final FiguresModel myFiguresModel;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialButton(
+      minWidth: double.infinity,
+      height: 50.0,
+      color: Colors.white,
+      onPressed: (() {
+        if (myFiguresModel.figures.isEmpty) {
+          return null;
+        }
+        for (var figure in myFiguresModel.figures) {
+          //api.setConfiguration(figure.);
+        }
+        return null;
+      }),
+      child: const Text("Aplicar"),
     );
   }
 }

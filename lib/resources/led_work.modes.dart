@@ -1,37 +1,34 @@
+import 'package:flutter/material.dart';
 import 'dart:convert';
 
 class FigureWorkMode {
   String figureName;
-  late String stringOn;
-  late String stringOff;
-  FigureWorkMode(this.figureName) {
-    stringOn = setStringOn(figureName);
-    stringOff = setStringOff(figureName);
+  String mode;
+  late String stringWorkMode;
+  List<Color> args;
+
+  FigureWorkMode(this.figureName, this.mode, this.args) {
+    stringWorkMode = setString(figureName, mode);
+    Map<String, dynamic> workJson = json.decode(stringWorkMode);
+    //only working for fill
+    //for (final arg in args) {
+    int r = args[0].red;
+    int g = args[0].green;
+    int b = args[0].blue;
+    String color = '{"r": $r, "g": $g, "b": $b}';
+    workJson[figureName]['args'] = json.decode(color);
+    stringWorkMode = json.encode(workJson);
   }
 
-  String setStringOn(String figureName) {
+  String setString(String figureName, String mode) {
     return '''
 {
   "$figureName":
   {
-    "mode": "fill",
+    "mode": "$mode",
     "args":
     {
-      "r": 100,
-      "g": 100,
-      "b": 100
     }
-  }
-}
-''';
-  }
-
-  String setStringOff(String figureName) {
-    return '''
-{
-  "$figureName":
-  {
-    "mode": "off"
   }
 }
 ''';
