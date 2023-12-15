@@ -18,9 +18,8 @@ class ApiService {
   static String scriptPath = "/scripts";
   String getConfigScript = "$scriptPath/get-config.py";
   String getInfoScript = "$scriptPath/get-info.py";
-  //Todo: Replace the following
-  //final final String setScript = "$scriptPath/set-config.py"; //good
-  final String setScript = "$scriptPath/comm-ledloop.py"; //bad
+  final String setScript = "$scriptPath/set-config.py";
+  final String setFigureScript = "$scriptPath/comm-ledloop.py";
 
   // GET
   Future<dynamic> getConfiguration() async {
@@ -62,6 +61,29 @@ class ApiService {
     }
 
     var url = Uri.parse(getBaseUrl() + setScript);
+    var response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: newConfig,
+    );
+    if (response.statusCode == 200) {
+      return "Éxito";
+    } else {
+      return response.statusCode.toString();
+    }
+  }
+
+  Future<dynamic> setFigureConfig(String newConfig) async {
+    return;
+    //Return offline if kDebugOffLine is true
+    if (kDebugOffLine) {
+      writeWorkModeFile(newConfig);
+      return "Éxito";
+    }
+
+    var url = Uri.parse(getBaseUrl() + setFigureScript);
     var response = await http.post(
       url,
       headers: {

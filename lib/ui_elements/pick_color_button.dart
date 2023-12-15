@@ -75,7 +75,7 @@ class _PickColorButtonState extends State<PickColorButton> {
               widget.updateState(selectedColor);
               Navigator.of(context).pop(false);
             },
-            child: const Text('CLOSE', style: TextStyle(color: Colors.blue)),
+            child: const Text('Cerrar', style: TextStyle(color: Colors.blue)),
           ),
         ],
       ),

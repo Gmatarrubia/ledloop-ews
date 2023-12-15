@@ -35,7 +35,7 @@ class _FigureCardState extends State<FigureCard> {
   }
 
   void updateActiveFigureMode(String newMode) async {
-    await widget.api.setConfiguration(
+    await widget.api.setFigureConfig(
         FigureWorkMode(widget.figure.name, newMode, colorsOfMode)
             .stringWorkMode);
     setState(() {
@@ -55,7 +55,7 @@ class _FigureCardState extends State<FigureCard> {
     //}
     colorsOfMode[0] = newColor;
     activeArgs.add(newColor);
-    await widget.api.setConfiguration(
+    await widget.api.setFigureConfig(
         FigureWorkMode(widget.figure.name, activeFigureMode, activeArgs)
             .stringWorkMode);
     setState(() {});

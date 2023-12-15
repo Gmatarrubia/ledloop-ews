@@ -80,7 +80,18 @@ class _FiguresViewState extends State<FiguresView> {
                   );
                 }
               }),
-          //ApplyBottom(myFiguresModel: myFiguresModel),
+          ApplyBottom(
+            api: api,
+            bottonAction: (() {
+              if (myFiguresModel.figures.isEmpty) {
+                return;
+              }
+              //TODO create a FiguresModel with current data from cards
+              //avoid that cards send data to the api
+              //api.setFigureConfig(myFiguresModel.toJson());
+              return;
+            }),
+          ),
         ],
       ),
     );
@@ -90,26 +101,20 @@ class _FiguresViewState extends State<FiguresView> {
 class ApplyBottom extends StatelessWidget {
   const ApplyBottom({
     super.key,
-    required this.myFiguresModel,
+    required this.bottonAction,
+    required this.api,
   });
 
-  final FiguresModel myFiguresModel;
+  final VoidCallback bottonAction;
+  final ApiService api;
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
       minWidth: double.infinity,
       height: 50.0,
-      color: Colors.white,
-      onPressed: (() {
-        if (myFiguresModel.figures.isEmpty) {
-          return null;
-        }
-        for (var figure in myFiguresModel.figures) {
-          //api.setConfiguration(figure.);
-        }
-        return null;
-      }),
+      color: Colors.lightGreen,
+      onPressed: bottonAction,
       child: const Text("Aplicar"),
     );
   }
