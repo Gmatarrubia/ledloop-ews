@@ -1,6 +1,7 @@
 import 'dart:convert';
-
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:ews_ledloop/providers/figures_provider.dart';
 import 'package:ews_ledloop/services/api_service.dart';
 import 'package:ews_ledloop/model/figures.dart';
 import 'package:ews_ledloop/ui_elements/pick_color_button.dart';
@@ -35,8 +36,7 @@ class _FigureCardState extends State<FigureCard> {
         widget.figure.currentMode = mode;
       }
     }
-    setState(() {
-     });
+    setState(() {});
   }
 
   void updateFigureColor(Color newColor) async {
@@ -54,13 +54,13 @@ class _FigureCardState extends State<FigureCard> {
     setState(() {});
   }
 
-  Color getColorFromArg(num) {
-    if (widget.figure.currentMode.args[num]["type"] == "color") {
+  Color getColorFromArg(i) {
+    if (widget.figure.currentMode.args[i]["type"] == "color") {
       return Color.fromARGB(
           255,
-          widget.figure.currentMode.args[num]["r"],
-          widget.figure.currentMode.args[num]["g"],
-          widget.figure.currentMode.args[num]["b"]);
+          widget.figure.currentMode.args[i]["r"],
+          widget.figure.currentMode.args[i]["g"],
+          widget.figure.currentMode.args[i]["b"]);
     } else {
       return const Color.fromARGB(0, 0, 0, 0);
     }
@@ -76,60 +76,85 @@ class _FigureCardState extends State<FigureCard> {
     return index < len ? true : false;
   }
 
+  void changeCardState(FiguresProvider figureProvider, bool currentStatus) {
+    figureProvider.setFigureState(widget.figure.name, !currentStatus);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: appTheme.cardTheme.color!,
-      child: Column(
-        children: [
-          Container(
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
-            child: Text(
-              widget.figure.name.capitalize(),
-              style: appTheme.textTheme.displayLarge,
+    return Consumer<FiguresProvider>(builder: (context, figureProvider, child) {
+      bool cardStatus = figureProvider.isFigureEnabled(widget.figure.name);
+      return Card(
+        color: appTheme.cardTheme.color!,
+        child: Column(
+          children: [
+            Container(
+              alignment: Alignment.centerLeft,
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 8.0, vertical: 3.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(
+                    widget.figure.name.capitalize(),
+                    style: appTheme.textTheme.displayLarge,
+                  ),
+                  IconButton.filled(
+                      icon: Icon(
+                        Icons.check_box,
+                        color: cardStatus
+                            ? Colors.lightGreen
+                            : appTheme.shadowColor,
+                        size: 23.0,
+                      ),
+                      onPressed: (() {
+                        changeCardState(figureProvider, cardStatus);
+                        setState(() {});
+                      })),
+                ],
+              ),
             ),
-          ),
-          DropdownButton<String>(
-            style: appTheme.dropdownMenuTheme.textStyle,
-            value: widget.figure.currentMode.name,
-            isExpanded: true,
-            onChanged: ((String? value) => updateActiveFigureMode(value!)),
-            items:
-                getModesNames().map<DropdownMenuItem<String>>((String value) {
-              return DropdownMenuItem<String>(
-                value: value,
-                child: Center(
-                  child: Text(value),
-                ),
-              );
-            }).toList(),
-          ),
-          SizedBox(
-            height: 100,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
-                    itemCount: widget.figure.currentMode.args.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: PickColorButton(
+            DropdownButton<String>(
+              style: appTheme.dropdownMenuTheme.textStyle,
+              value: widget.figure.currentMode.name,
+              isExpanded: true,
+              iconSize: 0.0,
+              focusColor: appTheme.primaryColor,
+              onChanged: ((String? value) => updateActiveFigureMode(value!)),
+              items:
+                  getModesNames().map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Center(
+                    child: Text(value),
+                  ),
+                );
+              }).toList(),
+            ),
+            SizedBox(
+              height: 50,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: widget.figure.currentMode.args.length,
+                      itemBuilder: (context, index) {
+                        return PickColorButton(
                             enabled: getEnableColorArgs(index),
                             updateState: updateFigureColor,
-                            startColor: getColorFromArg(index)),
-                      );
-                    }),
-              ],
+                            startColor: getColorFromArg(index));
+                      }),
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 }

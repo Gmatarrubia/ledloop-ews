@@ -74,7 +74,7 @@ class _FiguresViewState extends State<FiguresView> {
                 bottonAction: (() {
                   String model2Send = figureProvider.getModel2Send();
                   print(model2Send);
-                  api.setFigureConfig(model2Send);
+                  api.setConfiguration(model2Send);
                   return;
                 }),
               ),
@@ -100,7 +100,7 @@ class ApplyBottom extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialButton(
       minWidth: double.infinity,
-      height: 50.0,
+      height: 70.0,
       color: Colors.lightGreen,
       onPressed: bottonAction,
       child: const Text("Aplicar"),

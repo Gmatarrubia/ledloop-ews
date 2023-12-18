@@ -18,7 +18,7 @@ class ApiService {
   static String scriptPath = "/scripts";
   String getConfigScript = "$scriptPath/get-config.py";
   String getInfoScript = "$scriptPath/get-info.py";
-  final String setScript = "$scriptPath/set-config.py";
+  final String setScript = "$scriptPath/post-json.py";
   final String setFigureScript = "$scriptPath/comm-ledloop.py";
 
   // GET

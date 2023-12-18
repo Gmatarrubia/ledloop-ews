@@ -14,6 +14,9 @@ class Mode {
       args: List<dynamic>.from(json['args']),
     );
   }
+  factory Mode.disabled() {
+    return Mode(name: "off", nargs: 0, args: []);
+  }
   Map<String, dynamic> toJson() {
     return {
       'name': name,
@@ -69,10 +72,17 @@ class FiguresModel {
     });
   }
 
-  void setCurrentModes(workModeJson) {
+  void setCurrentModes(workModeJson, enableFigureModel) {
     Map<String, dynamic> workMode = json.decode(workModeJson);
     for (final figure in figures) {
-      figure.currentMode = Mode.fromJson(workMode[figure.name]);
+      if (workMode.containsKey(figure.name)) {
+        figure.currentMode = Mode.fromJson(workMode[figure.name]);
+        enableFigureModel[figure.name] = true;
+      }
+      else {
+        figure.currentMode = Mode.disabled();
+        enableFigureModel[figure.name] = false;
+      }
     }
   }
 }
