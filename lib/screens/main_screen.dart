@@ -18,7 +18,7 @@ class MainScreen extends StatelessWidget {
       body: Center(
         child: ChangeNotifierProvider<FiguresProvider>(
           create: (context) => FiguresProvider(),
-          child: const FiguresView(),
+          child: FiguresView(),
         )
       ),
     );

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:ews_ledloop/resources/ui_constants.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class PickColorButton extends StatefulWidget {
@@ -19,7 +19,7 @@ class PickColorButton extends StatefulWidget {
 
 class _PickColorButtonState extends State<PickColorButton> {
   late Color selectedColor = getStartColor();
-  Color currentColor = const Color(0xff443a49);
+  Color currentColor = const Color(0x00000000);
 
   Color getStartColor() {
     return widget.startColor;
@@ -56,7 +56,9 @@ class _PickColorButtonState extends State<PickColorButton> {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0.0)),
+        backgroundColor: Colors.black.withOpacity(0.75),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(kCornerRadius)),
         content: SingleChildScrollView(
           child: ColorPicker(
             pickerColor: selectedColor,

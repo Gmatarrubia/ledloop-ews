@@ -77,15 +77,17 @@ class _FigureCardState extends State<FigureCard> {
   }
 
   void changeCardState(FiguresProvider figureProvider, bool currentStatus) {
-    figureProvider.setFigureState(widget.figure.name, !currentStatus);
+    figureProvider.setFigureState(widget.figure.name, currentStatus);
   }
 
   @override
   Widget build(BuildContext context) {
+    var kCardColor = Colors.white.withAlpha(215);
+
     return Consumer<FiguresProvider>(builder: (context, figureProvider, child) {
       bool cardStatus = figureProvider.isFigureEnabled(widget.figure.name);
       return Card(
-        color: appTheme.cardTheme.color!,
+        color: kCardColor,
         child: Column(
           children: [
             Container(
@@ -98,20 +100,16 @@ class _FigureCardState extends State<FigureCard> {
                 children: [
                   Text(
                     widget.figure.name.capitalize(),
-                    style: appTheme.textTheme.displayLarge,
+                    style: kDisplayLarge,
                   ),
-                  IconButton.filled(
-                      icon: Icon(
-                        Icons.check_box,
-                        color: cardStatus
-                            ? Colors.lightGreen
-                            : appTheme.shadowColor,
-                        size: 23.0,
-                      ),
-                      onPressed: (() {
-                        changeCardState(figureProvider, cardStatus);
-                        setState(() {});
-                      })),
+                  Switch(
+                    value: cardStatus,
+                    activeColor: appTheme.primaryColorDark,
+                    onChanged: (bool value) {
+                      changeCardState(figureProvider, value);
+                      setState(() {});
+                    },
+                  ),
                 ],
               ),
             ),
@@ -120,14 +118,15 @@ class _FigureCardState extends State<FigureCard> {
               value: widget.figure.currentMode.name,
               isExpanded: true,
               iconSize: 0.0,
-              focusColor: appTheme.primaryColor,
+              focusColor: kCardColor.withOpacity(0.0),
+              dropdownColor: appTheme.primaryColorDark.withOpacity(0.95),
               onChanged: ((String? value) => updateActiveFigureMode(value!)),
               items:
                   getModesNames().map<DropdownMenuItem<String>>((String value) {
                 return DropdownMenuItem<String>(
                   value: value,
                   child: Center(
-                    child: Text(value),
+                    child: Text(value.capitalize()),
                   ),
                 );
               }).toList(),

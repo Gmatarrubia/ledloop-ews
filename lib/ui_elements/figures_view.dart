@@ -1,20 +1,14 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ews_ledloop/services/api_service.dart';
 import 'package:ews_ledloop/ui_elements/figure_card.dart';
 import 'package:ews_ledloop/resources/ui_constants.dart';
 import 'package:ews_ledloop/providers/figures_provider.dart';
+import 'package:ews_ledloop/ui_elements/apply_button.dart';
 
-class FiguresView extends StatefulWidget {
-  const FiguresView({super.key});
+class FiguresView extends StatelessWidget {
+  FiguresView({super.key});
 
-  @override
-  State<FiguresView> createState() => _FiguresViewState();
-}
-
-class _FiguresViewState extends State<FiguresView> {
   final ApiService api = ApiService();
 
   @override
@@ -28,7 +22,7 @@ class _FiguresViewState extends State<FiguresView> {
             child: CircularProgressIndicator(
               strokeWidth: 10.0,
               backgroundColor: Colors.black54,
-              color: Colors.tealAccent,
+              color: Colors.orangeAccent,
             ),
           ),
         );
@@ -69,13 +63,12 @@ class _FiguresViewState extends State<FiguresView> {
                   ),
                 ),
               ),
-              ApplyBottom(
+              ApplyButton(
                 api: api,
-                bottonAction: (() {
+                buttonAction: (() {
                   String model2Send = figureProvider.getModel2Send();
                   print(model2Send);
                   api.setConfiguration(model2Send);
-                  return;
                 }),
               ),
             ],
@@ -83,27 +76,5 @@ class _FiguresViewState extends State<FiguresView> {
         );
       }
     });
-  }
-}
-
-class ApplyBottom extends StatelessWidget {
-  const ApplyBottom({
-    super.key,
-    required this.bottonAction,
-    required this.api,
-  });
-
-  final VoidCallback bottonAction;
-  final ApiService api;
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialButton(
-      minWidth: double.infinity,
-      height: 70.0,
-      color: Colors.lightGreen,
-      onPressed: bottonAction,
-      child: const Text("Aplicar"),
-    );
   }
 }
