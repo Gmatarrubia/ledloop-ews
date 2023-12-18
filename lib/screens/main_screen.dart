@@ -1,6 +1,8 @@
-import 'package:ews_ledloop/resources/ui_constants.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:ews_ledloop/resources/ui_constants.dart';
 import 'package:ews_ledloop/ui_elements/figures_view.dart';
+import 'package:ews_ledloop/providers/figures_provider.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key, required this.title});
@@ -13,8 +15,11 @@ class MainScreen extends StatelessWidget {
         titleTextStyle: appTheme.appBarTheme.titleTextStyle,
         centerTitle: true,
       ),
-      body: const Center(
-        child: FiguresView(),
+      body: Center(
+        child: ChangeNotifierProvider<FiguresProvider>(
+          create: (context) => FiguresProvider(),
+          child: const FiguresView(),
+        )
       ),
     );
   }

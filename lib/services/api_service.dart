@@ -76,7 +76,6 @@ class ApiService {
   }
 
   Future<dynamic> setFigureConfig(String newConfig) async {
-    return;
     //Return offline if kDebugOffLine is true
     if (kDebugOffLine) {
       writeWorkModeFile(newConfig);

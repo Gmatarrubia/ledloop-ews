@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:ews_ledloop/services/api_service.dart';
-import 'package:ews_ledloop/resources/led_work.modes.dart';
 import 'package:ews_ledloop/model/figures.dart';
 import 'package:ews_ledloop/ui_elements/pick_color_button.dart';
 import 'package:ews_ledloop/resources/ui_constants.dart';
@@ -16,10 +15,6 @@ class FigureCard extends StatefulWidget {
 }
 
 class _FigureCardState extends State<FigureCard> {
-  String activeFigureMode = "off";
-  List<Color> colorsOfMode = [Colors.black, Colors.black, Colors.black];
-  int localNargs = 0;
-
   List<String> getModesNames() {
     List<String> modeNames = [];
     for (final mode in widget.figure.modes) {
@@ -35,30 +30,50 @@ class _FigureCardState extends State<FigureCard> {
   }
 
   void updateActiveFigureMode(String newMode) async {
-    await widget.api.setFigureConfig(
-        FigureWorkMode(widget.figure.name, newMode, colorsOfMode)
-            .stringWorkMode);
-    setState(() {
-      activeFigureMode = newMode;
-      for (final mode in widget.figure.modes) {
-        if (mode.name == activeFigureMode) {
-          localNargs = mode.nargs;
-        }
+    for (final mode in widget.figure.modes) {
+      if (mode.name == newMode) {
+        widget.figure.currentMode = mode;
       }
-    });
+    }
+    setState(() {
+     });
   }
 
   void updateFigureColor(Color newColor) async {
-    List<Color> activeArgs = [];
-    //for (int i = 0; i < localNargs; i++) {
-    //  activeArgs.add(colorsOfMode[i]);
-    //}
-    colorsOfMode[0] = newColor;
-    activeArgs.add(newColor);
-    await widget.api.setFigureConfig(
-        FigureWorkMode(widget.figure.name, activeFigureMode, activeArgs)
-            .stringWorkMode);
+    int r = newColor.red, g = newColor.green, b = newColor.blue;
+    String newColorString = '''
+[
+  {
+    "type" : "color",
+    "r" : $r,
+    "g" : $g,
+    "b" : $b
+  }
+]''';
+    widget.figure.currentMode.args = jsonDecode(newColorString);
     setState(() {});
+  }
+
+  Color getColorFromArg(num) {
+    if (widget.figure.currentMode.args[num]["type"] == "color") {
+      return Color.fromARGB(
+          255,
+          widget.figure.currentMode.args[num]["r"],
+          widget.figure.currentMode.args[num]["g"],
+          widget.figure.currentMode.args[num]["b"]);
+    } else {
+      return const Color.fromARGB(0, 0, 0, 0);
+    }
+  }
+
+  bool getEnableColorArgs(index) {
+    var len = 0;
+    for (final arg in widget.figure.currentMode.args) {
+      if (arg["type"] == "color") {
+        len++;
+      }
+    }
+    return index < len ? true : false;
   }
 
   @override
@@ -75,46 +90,43 @@ class _FigureCardState extends State<FigureCard> {
               style: appTheme.textTheme.displayLarge,
             ),
           ),
-          FutureBuilder(
-              future: getCurrentMode(),
-              builder: (context, AsyncSnapshot<String> currentMode) {
-                if (currentMode.connectionState == ConnectionState.waiting) {
-                  return const Text("Cargando..");
-                } else {
-                  return DropdownButton<String>(
-                    style: appTheme.dropdownMenuTheme.textStyle,
-                    value: currentMode.data,
-                    isExpanded: true,
-                    onChanged: ((String? value) =>
-                        updateActiveFigureMode(value!)),
-                    items: getModesNames()
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Center(
-                          child: Text(value),
-                        ),
+          DropdownButton<String>(
+            style: appTheme.dropdownMenuTheme.textStyle,
+            value: widget.figure.currentMode.name,
+            isExpanded: true,
+            onChanged: ((String? value) => updateActiveFigureMode(value!)),
+            items:
+                getModesNames().map<DropdownMenuItem<String>>((String value) {
+              return DropdownMenuItem<String>(
+                value: value,
+                child: Center(
+                  child: Text(value),
+                ),
+              );
+            }).toList(),
+          ),
+          SizedBox(
+            height: 100,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    itemCount: widget.figure.currentMode.args.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: PickColorButton(
+                            enabled: getEnableColorArgs(index),
+                            updateState: updateFigureColor,
+                            startColor: getColorFromArg(index)),
                       );
-                    }).toList(),
-                  );
-                }
-              }),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              PickColorButton(
-                  enabled: localNargs > 0,
-                  updateState: updateFigureColor,
-                  startColor: colorsOfMode[0]),
-              PickColorButton(
-                  enabled: localNargs > 1,
-                  updateState: updateFigureColor,
-                  startColor: colorsOfMode[1]),
-              PickColorButton(
-                  enabled: localNargs > 2,
-                  updateState: updateFigureColor,
-                  startColor: colorsOfMode[2]),
-            ],
+                    }),
+              ],
+            ),
           ),
         ],
       ),

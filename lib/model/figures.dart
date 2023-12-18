@@ -3,7 +3,7 @@ import 'dart:convert';
 class Mode {
   String name;
   int nargs;
-  List<String> args;
+  List<dynamic> args;
 
   Mode({required this.name, required this.nargs, required this.args});
 
@@ -11,7 +11,7 @@ class Mode {
     return Mode(
       name: json['name'],
       nargs: json['nargs'],
-      args: List<String>.from(json['args']),
+      args: List<dynamic>.from(json['args']),
     );
   }
   Map<String, dynamic> toJson() {
@@ -26,6 +26,8 @@ class Mode {
 class Figure {
   String name;
   List<Mode> modes;
+  Mode currentMode =
+      Mode.fromJson(jsonDecode('{"name":"off", "nargs": 0, "args":[]}'));
 
   Figure({required this.name, required this.modes});
 
@@ -55,7 +57,8 @@ class FiguresModel {
   factory FiguresModel.fromJson(String jsonStr) {
     Map<String, dynamic> jsonData = json.decode(jsonStr);
     List<dynamic> jsonFigures = jsonData['figures'];
-    List<Figure> figures = jsonFigures.map((json) => Figure.fromJson(json)).toList();
+    List<Figure> figures =
+        jsonFigures.map((json) => Figure.fromJson(json)).toList();
 
     return FiguresModel(figures: figures);
   }
@@ -64,5 +67,12 @@ class FiguresModel {
     return json.encode({
       'figures': figures.map((figure) => figure.toJson()).toList(),
     });
+  }
+
+  void setCurrentModes(workModeJson) {
+    Map<String, dynamic> workMode = json.decode(workModeJson);
+    for (final figure in figures) {
+      figure.currentMode = Mode.fromJson(workMode[figure.name]);
+    }
   }
 }
