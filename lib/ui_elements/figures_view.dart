@@ -38,28 +38,22 @@ class FiguresView extends StatelessWidget {
                 child: Container(
                   padding: const EdgeInsets.all(12),
                   alignment: Alignment.center,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: figureProvider.figureModel.figures.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 3.0, horizontal: 12.0),
-                            alignment: Alignment.center,
-                            child: FigureCard(
-                              figure: figureProvider.figureModel.figures[index],
-                              api: api,
-                            ),
-                          );
-                        },
-                      ),
-                    ],
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: figureProvider.figureModel.figures.length,
+                    itemBuilder: (context, index) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 3.0, horizontal: 12.0),
+                        alignment: Alignment.center,
+                        child: FigureCard(
+                          figure: figureProvider.figureModel.figures[index],
+                          api: api,
+                        ),
+                      );
+                    },
                   ),
                 ),
               ),
