@@ -5,12 +5,10 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 class PickColorButton extends StatefulWidget {
   const PickColorButton(
       {super.key,
-      required this.enabled,
       required this.updateState,
       required this.startColor});
 
   final Function updateState;
-  final bool enabled;
   final Color startColor;
 
   @override
@@ -37,16 +35,11 @@ class _PickColorButtonState extends State<PickColorButton> {
       padding: const EdgeInsets.all(5.0),
       child: MaterialButton(
         elevation: 10.0,
-        shape: CircleBorder(
-            side: widget.enabled
-                ? const BorderSide(width: 1.0)
-                : BorderSide.none),
+        shape: const CircleBorder(side: BorderSide(width: 1.0)),
         color: selectedColor,
-        onPressed: widget.enabled
-            ? (() {
-                colorPickerDialog();
-              })
-            : null,
+        onPressed: (() {
+          colorPickerDialog();
+        }),
         child: const Text(""),
       ),
     );

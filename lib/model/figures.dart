@@ -50,6 +50,27 @@ class Figure {
       'modes': modes.map((mode) => mode.toJson()).toList(),
     };
   }
+
+  int getNumberColorsArgs() {
+    int num = 0;
+    for (final arg in currentMode.args) {
+      if (arg["type"] == "color") {
+        num++;
+      }
+    }
+    return num;
+  }
+
+  int getNumberDoubleArgs() {
+    int num = 0;
+    for (final arg in currentMode.args) {
+      if (arg["type"] == "speed") {
+        num++;
+      }
+    }
+    return num;
+  }
+
 }
 
 class FiguresModel {
@@ -78,8 +99,7 @@ class FiguresModel {
       if (workMode.containsKey(figure.name)) {
         figure.currentMode = Mode.fromJson(workMode[figure.name]);
         enableFigureModel[figure.name] = true;
-      }
-      else {
+      } else {
         figure.currentMode = Mode.disabled();
         enableFigureModel[figure.name] = false;
       }

@@ -5,6 +5,7 @@ import 'package:ews_ledloop/providers/figures_provider.dart';
 import 'package:ews_ledloop/services/api_service.dart';
 import 'package:ews_ledloop/model/figures.dart';
 import 'package:ews_ledloop/ui_elements/pick_color_button.dart';
+import 'package:ews_ledloop/ui_elements/pick_double_button.dart';
 import 'package:ews_ledloop/resources/ui_constants.dart';
 
 class FigureCard extends StatefulWidget {
@@ -66,14 +67,14 @@ class _FigureCardState extends State<FigureCard> {
     }
   }
 
-  bool getEnableColorArgs(index) {
-    var len = 0;
+  double getSpeedFromArg() {
+    var speed = 0.5;
     for (final arg in widget.figure.currentMode.args) {
-      if (arg["type"] == "color") {
-        len++;
+      if (arg["type"] == "speed") {
+        speed = arg["value"];
       }
     }
-    return index < len ? true : false;
+    return speed;
   }
 
   void changeCardState(FiguresProvider figureProvider, bool currentStatus) {
@@ -141,13 +142,20 @@ class _FigureCardState extends State<FigureCard> {
                   ListView.builder(
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
-                      itemCount: widget.figure.currentMode.args.length,
+                      itemCount: widget.figure.getNumberColorsArgs(),
                       itemBuilder: (context, index) {
                         return PickColorButton(
-                            enabled: getEnableColorArgs(index),
                             updateState: updateFigureColor,
                             startColor: getColorFromArg(index));
                       }),
+                  Visibility(
+                    visible: widget.figure.getNumberDoubleArgs() > 0,
+                    child: PickDoubleButton(
+                      enabled: widget.figure.getNumberDoubleArgs() > 0,
+                      updateState: updateFigureColor,
+                      startValue: getSpeedFromArg(),
+                    ),
+                  ),
                 ],
               ),
             ),
