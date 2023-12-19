@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ews_ledloop/resources/ui_constants.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +16,7 @@ class PickDoubleButton extends StatefulWidget {
 
 class _PickDoubleButtonState extends State<PickDoubleButton> {
   late double currentValue = getStartValue();
+  Timer? timer;
 
   double getStartValue() {
     return widget.startValue;
@@ -32,7 +35,7 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
       padding: const EdgeInsets.all(5.0),
       child: MaterialButton(
         elevation: 10.0,
-        height: 50.0,
+        height: 46.0,
         shape: const CircleBorder(side: BorderSide(width: 1.0)),
         color: appTheme.primaryColor,
         onPressed: (() {
@@ -64,13 +67,27 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton.outlined(
-                    onPressed: (() {
-                      valueIncrease(0.01);
-                      setState(() {});
+                  InkWell(
+                    onTapDown: ((details) {
+                      timer = Timer.periodic(const Duration(milliseconds: 100),
+                          (timer) {
+                        setState(() {
+                          valueIncrease(0.01);
+                        });
+                      });
                     }),
-                    icon: const Icon(Icons.keyboard_arrow_up),
-                    color: appTheme.primaryColor,
+                    onTapUp: (details) {
+                      // Stop the timer when the button is released
+                      timer?.cancel();
+                    },
+                    onTapCancel: () {
+                      // Stop the timer if the button press is canceled
+                      timer?.cancel();
+                    },
+                    child: Icon(
+                      Icons.keyboard_arrow_up_outlined,
+                      color: appTheme.primaryColor,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -79,13 +96,27 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
                       style: kDisplayLarge,
                     ),
                   ),
-                  IconButton.outlined(
-                    onPressed: (() {
-                      valueIncrease(-0.01);
-                      setState(() {});
+                  InkWell(
+                    onTapDown: ((details) {
+                      timer = Timer.periodic(const Duration(milliseconds: 100),
+                          (timer) {
+                        setState(() {
+                          valueIncrease(-0.01);
+                        });
+                      });
                     }),
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    color: appTheme.primaryColor,
+                    onTapUp: (details) {
+                      // Stop the timer when the button is released
+                      timer?.cancel();
+                    },
+                    onTapCancel: () {
+                      // Stop the timer if the button press is canceled
+                      timer?.cancel();
+                    },
+                    child: Icon(
+                      Icons.keyboard_arrow_down,
+                      color: appTheme.primaryColor,
+                    ),
                   ),
                 ],
               ),
@@ -104,5 +135,11 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
             );
           });
         });
+  }
+  @override
+  void dispose() {
+    // Dispose the timer to prevent memory leaks
+    timer?.cancel();
+    super.dispose();
   }
 }

@@ -143,7 +143,7 @@ class _FigureCardState extends State<FigureCard> {
               }).toList(),
             ),
             SizedBox(
-              height: 70,
+              height: widget.figure.currentMode.args.isEmpty ? 30 : 70,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.center,

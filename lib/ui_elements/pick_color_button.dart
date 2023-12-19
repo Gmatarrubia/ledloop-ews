@@ -4,7 +4,8 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class PickColorButton extends StatefulWidget {
   const PickColorButton(
-      {super.key, required this.updateState,
+      {super.key,
+      required this.updateState,
       required this.startColor,
       required this.index});
 
@@ -35,7 +36,7 @@ class _PickColorButtonState extends State<PickColorButton> {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: MaterialButton(
-        height: 50.0,
+        height: 46.0,
         elevation: 10.0,
         shape: const CircleBorder(side: BorderSide(width: 1.0)),
         color: selectedColor,
