@@ -61,16 +61,20 @@ class Figure {
     return num;
   }
 
-  int getNumberDoubleArgs() {
-    int num = 0;
+  (bool, int, double) getInfoSpeedArgs() {
+    bool hasSpeedArg = false;
+    int pos = 0;
+    double value = 0.0;
     for (final arg in currentMode.args) {
       if (arg["type"] == "speed") {
-        num++;
+        hasSpeedArg = true;
+        value = arg["value"];
+        break;
       }
+      pos++;
     }
-    return num;
+    return (hasSpeedArg, pos, value);
   }
-
 }
 
 class FiguresModel {

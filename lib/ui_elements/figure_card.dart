@@ -40,19 +40,30 @@ class _FigureCardState extends State<FigureCard> {
     setState(() {});
   }
 
-  void updateFigureColor(Color newColor) async {
+  void updateFigureColor(int index, Color newColor) {
     int r = newColor.red, g = newColor.green, b = newColor.blue;
     String newColorString = '''
-[
   {
     "type" : "color",
     "r" : $r,
     "g" : $g,
     "b" : $b
   }
-]''';
-    widget.figure.currentMode.args = jsonDecode(newColorString);
+''';
+    widget.figure.currentMode.args[index] = jsonDecode(newColorString);
     setState(() {});
+  }
+
+  void updateFigureSpeed(double value) {
+    var (hasSpeed, argPos, speed) = widget.figure.getInfoSpeedArgs();
+    String valueString = value.toStringAsFixed(2);
+    String newSpeedString = '''
+  {
+    "type" : "speed",
+    "value" : $valueString
+  }
+''';
+    widget.figure.currentMode.args[argPos] = jsonDecode(newSpeedString);
   }
 
   Color getColorFromArg(i) {
@@ -69,11 +80,9 @@ class _FigureCardState extends State<FigureCard> {
 
   double getSpeedFromArg() {
     var speed = 0.5;
-    for (final arg in widget.figure.currentMode.args) {
-      if (arg["type"] == "speed") {
-        speed = arg["value"];
-      }
-    }
+    bool hasSpeed = false;
+    int argPos = 0;
+    (hasSpeed, argPos, speed) = widget.figure.getInfoSpeedArgs();
     return speed;
   }
 
@@ -145,14 +154,14 @@ class _FigureCardState extends State<FigureCard> {
                       itemCount: widget.figure.getNumberColorsArgs(),
                       itemBuilder: (context, index) {
                         return PickColorButton(
+                            index: index,
                             updateState: updateFigureColor,
                             startColor: getColorFromArg(index));
                       }),
                   Visibility(
-                    visible: widget.figure.getNumberDoubleArgs() > 0,
+                    visible: widget.figure.getInfoSpeedArgs().$1,
                     child: PickDoubleButton(
-                      enabled: widget.figure.getNumberDoubleArgs() > 0,
-                      updateState: updateFigureColor,
+                      updateState: updateFigureSpeed,
                       startValue: getSpeedFromArg(),
                     ),
                   ),

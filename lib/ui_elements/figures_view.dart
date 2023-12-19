@@ -36,7 +36,7 @@ class FiguresView extends StatelessWidget {
             children: [
               Center(
                 child: Container(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 12.0),
                   alignment: Alignment.center,
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,

@@ -3,13 +3,9 @@ import 'package:flutter/material.dart';
 
 class PickDoubleButton extends StatefulWidget {
   const PickDoubleButton(
-      {super.key,
-      required this.enabled,
-      required this.updateState,
-      required this.startValue});
+      {super.key, required this.updateState, required this.startValue});
 
   final Function updateState;
-  final bool enabled;
   final double startValue;
 
   @override
@@ -17,17 +13,17 @@ class PickDoubleButton extends StatefulWidget {
 }
 
 class _PickDoubleButtonState extends State<PickDoubleButton> {
-  late double selectedValue = getStartValue();
-  double currentValue = 0.0;
+  late double currentValue = getStartValue();
 
   double getStartValue() {
     return widget.startValue;
   }
 
-  void changeValue(double value) {
-    setState(() {
-      selectedValue = value;
-    });
+  void valueIncrease(double incease) {
+    currentValue = currentValue + incease;
+    widget.updateState(currentValue);
+    setState(() {});
+    return;
   }
 
   @override
@@ -36,18 +32,18 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
       padding: const EdgeInsets.all(5.0),
       child: MaterialButton(
         elevation: 10.0,
-        shape: CircleBorder(
-            side: widget.enabled
-                ? const BorderSide(width: 1.0)
-                : BorderSide.none),
+        height: 75,
+        shape: const CircleBorder(side: BorderSide(width: 1.0)),
         color: Colors.blueGrey,
-        onPressed: widget.enabled
-            ? (() {
-                doublePickerDialog();
-              })
-            : null,
-        child: Text(currentValue.toString(),
-          style: kDisplayMedium,
+        onPressed: (() {
+          doublePickerDialog();
+        }),
+        child: Container(
+          padding: const EdgeInsets.all(2),
+          child: Text(
+            currentValue.toStringAsFixed(2),
+            style: kDisplayMedium,
+          ),
         ),
       ),
     );
@@ -55,34 +51,59 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
 
   Future doublePickerDialog() {
     return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.black.withOpacity(0.75),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(kCornerRadius)),
-        content: const Column(
-          children: [
-            IconButton.outlined(onPressed: null, icon: Icon(
-              Icons.arrow_circle_up),
-            ),
-            Text("data"),
-            IconButton.outlined(onPressed: null, icon: Icon(
-              Icons.arrow_circle_down),
-            ),
-          ],
-        ),
-        actions: <Widget>[
-          TextButton(
-            style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.only(
-                    left: 30.0, top: 0.0, right: 30.0, bottom: 0.0)),
-            onPressed: () {
-              Navigator.of(context).pop(false);
-            },
-            child: const Text('Cerrar', style: TextStyle(color: Colors.blue)),
-          ),
-        ],
-      ),
-    );
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return AlertDialog(
+              backgroundColor: Colors.black.withOpacity(0.75),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(kCornerRadius)),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton.outlined(
+                    onPressed: (() {
+                      valueIncrease(0.01);
+                      setState(() {});
+                    }),
+                    icon: const Icon(Icons.keyboard_arrow_up),
+                    color: appTheme.primaryColor,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      currentValue.toStringAsFixed(2),
+                      style: kDisplayLarge.copyWith(
+                        color: appTheme.primaryColorDark,
+                      ),
+                    ),
+                  ),
+                  IconButton.outlined(
+                    onPressed: (() {
+                      valueIncrease(-0.01);
+                      setState(() {});
+                    }),
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    color: appTheme.primaryColor,
+                  ),
+                ],
+              ),
+              actions: <Widget>[
+                TextButton(
+                  style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.only(
+                          left: 30.0, top: 0.0, right: 30.0, bottom: 0.0)),
+                  onPressed: () {
+                    widget.updateState(currentValue);
+                    Navigator.of(context).pop(false);
+                  },
+                  child: Text('Cerrar',
+                      style: TextStyle(color: appTheme.primaryColorDark)),
+                ),
+              ],
+            );
+          });
+        });
   }
 }

@@ -4,12 +4,13 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class PickColorButton extends StatefulWidget {
   const PickColorButton(
-      {super.key,
-      required this.updateState,
-      required this.startColor});
+      {super.key, required this.updateState,
+      required this.startColor,
+      required this.index});
 
   final Function updateState;
   final Color startColor;
+  final int index;
 
   @override
   State<PickColorButton> createState() => _PickColorButtonState();
@@ -68,7 +69,7 @@ class _PickColorButtonState extends State<PickColorButton> {
                 padding: const EdgeInsets.only(
                     left: 30.0, top: 0.0, right: 30.0, bottom: 0.0)),
             onPressed: () {
-              widget.updateState(selectedColor);
+              widget.updateState(widget.index, selectedColor);
               Navigator.of(context).pop(false);
             },
             child: const Text('Cerrar', style: TextStyle(color: Colors.blue)),
