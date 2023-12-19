@@ -2,25 +2,22 @@ import 'dart:convert';
 
 class Mode {
   String name;
-  int nargs;
   List<dynamic> args;
 
-  Mode({required this.name, required this.nargs, required this.args});
+  Mode({required this.name, required this.args});
 
   factory Mode.fromJson(Map<String, dynamic> json) {
     return Mode(
       name: json['name'],
-      nargs: json['nargs'],
       args: List<dynamic>.from(json['args']),
     );
   }
   factory Mode.disabled() {
-    return Mode(name: "off", nargs: 0, args: []);
+    return Mode(name: "off", args: []);
   }
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'nargs': nargs,
       'args': args,
     };
   }
@@ -30,7 +27,7 @@ class Figure {
   String name;
   List<Mode> modes;
   Mode currentMode =
-      Mode.fromJson(jsonDecode('{"name":"off", "nargs": 0, "args":[]}'));
+      Mode.fromJson(jsonDecode('{"name":"off", "args":[]}'));
 
   Figure({required this.name, required this.modes});
 
