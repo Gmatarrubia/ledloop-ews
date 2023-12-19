@@ -17,9 +17,10 @@ class ApplyButton extends StatelessWidget {
     return MaterialButton(
       minWidth: double.infinity,
       height: 70.0,
-      color: Colors.orange,
+      color: appTheme.primaryColorDark,
       onPressed: buttonAction,
-      child: const Text("Aplicar",
+      child: const Text(
+        "Aplicar",
         style: kDisplayLarge,
       ),
     );

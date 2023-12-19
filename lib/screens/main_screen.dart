@@ -15,12 +15,25 @@ class MainScreen extends StatelessWidget {
         titleTextStyle: appTheme.appBarTheme.titleTextStyle,
         centerTitle: true,
       ),
-      body: Center(
-        child: ChangeNotifierProvider<FiguresProvider>(
-          create: (context) => FiguresProvider(),
-          child: FiguresView(),
-        )
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: <Color>[
+              appTheme.primaryColor,
+              Colors.pink,
+            ],
+          ),
+        ),
+        child: Center(
+          child: ChangeNotifierProvider<FiguresProvider>(
+            create: (context) => FiguresProvider(),
+            child: FiguresView(),
+          ),
+        ),
       ),
+      backgroundColor: Colors.transparent,
     );
   }
 }

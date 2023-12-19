@@ -17,6 +17,9 @@ const TextStyle kDisplayLarge =
 const TextStyle kDisplayMedium =
     TextStyle(fontSize: 15, fontFamily: 'nonito', color: kTextColor);
 
+const TextStyle kDisplaySmall =
+    TextStyle(fontSize: 10, fontFamily: 'nonito', color: kTextColor);
+
 const double kCornerRadius = 20.0;
 
 ThemeData appTheme = ThemeData(

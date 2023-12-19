@@ -32,9 +32,9 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
       padding: const EdgeInsets.all(5.0),
       child: MaterialButton(
         elevation: 10.0,
-        height: 75,
+        height: 50.0,
         shape: const CircleBorder(side: BorderSide(width: 1.0)),
-        color: Colors.blueGrey,
+        color: appTheme.primaryColor,
         onPressed: (() {
           doublePickerDialog();
         }),
@@ -42,7 +42,9 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
           padding: const EdgeInsets.all(2),
           child: Text(
             currentValue.toStringAsFixed(2),
-            style: kDisplayMedium,
+            style: kDisplayMedium.copyWith(
+              color: const Color.fromARGB(255, 0, 0, 0),
+            ),
           ),
         ),
       ),
@@ -55,7 +57,7 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
         builder: (context) {
           return StatefulBuilder(builder: (context, setState) {
             return AlertDialog(
-              backgroundColor: Colors.black.withOpacity(0.75),
+              backgroundColor: Colors.white.withOpacity(0.90),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(kCornerRadius)),
               content: Column(
@@ -74,9 +76,7 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       currentValue.toStringAsFixed(2),
-                      style: kDisplayLarge.copyWith(
-                        color: appTheme.primaryColorDark,
-                      ),
+                      style: kDisplayLarge,
                     ),
                   ),
                   IconButton.outlined(
@@ -98,8 +98,7 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
                     widget.updateState(currentValue);
                     Navigator.of(context).pop(false);
                   },
-                  child: Text('Cerrar',
-                      style: TextStyle(color: appTheme.primaryColorDark)),
+                  child: const Text('Cerrar', style: kDisplayLarge),
                 ),
               ],
             );

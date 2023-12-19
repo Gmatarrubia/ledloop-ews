@@ -35,6 +35,7 @@ class _PickColorButtonState extends State<PickColorButton> {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: MaterialButton(
+        height: 50.0,
         elevation: 10.0,
         shape: const CircleBorder(side: BorderSide(width: 1.0)),
         color: selectedColor,
@@ -50,7 +51,7 @@ class _PickColorButtonState extends State<PickColorButton> {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.black.withOpacity(0.75),
+        backgroundColor: Colors.white.withOpacity(0.90),
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(kCornerRadius)),
         content: SingleChildScrollView(
@@ -72,7 +73,7 @@ class _PickColorButtonState extends State<PickColorButton> {
               widget.updateState(widget.index, selectedColor);
               Navigator.of(context).pop(false);
             },
-            child: const Text('Cerrar', style: TextStyle(color: Colors.blue)),
+            child: const Text('Cerrar', style: kDisplayMedium),
           ),
         ],
       ),

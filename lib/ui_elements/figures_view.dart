@@ -27,17 +27,17 @@ class FiguresView extends StatelessWidget {
           ),
         );
       } else {
-        return Container(
-          color: appTheme.colorScheme.background,
-          child: Stack(
-            alignment: Alignment.bottomCenter,
-            fit: StackFit.loose,
-            textDirection: TextDirection.ltr,
-            children: [
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.symmetric(vertical: 0.0, horizontal: 12.0),
-                  alignment: Alignment.center,
+        return Stack(
+          alignment: Alignment.bottomCenter,
+          fit: StackFit.loose,
+          textDirection: TextDirection.ltr,
+          children: [
+            Center(
+              child: Container(
+                padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 60.0),
+                alignment: Alignment.center,
+                child: ScrollConfiguration(
+                  behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -57,16 +57,16 @@ class FiguresView extends StatelessWidget {
                   ),
                 ),
               ),
-              ApplyButton(
-                api: api,
-                buttonAction: (() {
-                  String model2Send = figureProvider.getModel2Send();
-                  print(model2Send);
-                  api.setConfiguration(model2Send);
-                }),
-              ),
-            ],
-          ),
+            ),
+            ApplyButton(
+              api: api,
+              buttonAction: (() {
+                String model2Send = figureProvider.getModel2Send();
+                print(model2Send);
+                api.setConfiguration(model2Send);
+              }),
+            ),
+          ],
         );
       }
     });
