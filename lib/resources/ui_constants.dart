@@ -9,7 +9,7 @@ ColorScheme myColorScheme = ColorScheme.fromSeed(
 );
 
 const TextStyle kTitleLarge =
-    TextStyle(fontSize: 25, fontFamily: 'nonito-semibold', color: kTextColor);
+    TextStyle(fontFamily: 'nonito-bold', color: kTextColor);
 
 const TextStyle kDisplayLarge =
     TextStyle(fontSize: 20, fontFamily: 'nonito-semibold', color: kTextColor);
@@ -41,8 +41,9 @@ ThemeData appTheme = ThemeData(
     ),
     textTheme: ButtonTextTheme.primary,
   ),
-  cardTheme: CardTheme(
-    color: myColorScheme.primary,
+  cardTheme: const CardTheme(
+    color: Color(0xffffffff),
+    surfaceTintColor: Colors.transparent,
   ),
   dropdownMenuTheme: const DropdownMenuThemeData(
     textStyle: TextStyle(

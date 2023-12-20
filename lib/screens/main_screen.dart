@@ -11,8 +11,12 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(title),
-        titleTextStyle: appTheme.appBarTheme.titleTextStyle,
+        title: Text(
+          title,
+          textScaleFactor: 1.1,
+          style: kTitleLarge,
+        ),
+        surfaceTintColor: Colors.transparent,
         centerTitle: true,
       ),
       body: Container(

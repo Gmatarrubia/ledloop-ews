@@ -96,8 +96,6 @@ class _FigureCardState extends State<FigureCard> {
     return Consumer<FiguresProvider>(builder: (context, figureProvider, child) {
       bool cardStatus = figureProvider.isFigureEnabled(widget.figure.name);
       return Card(
-        elevation: 10.0,
-        color: kCardColor,
         child: Column(
           children: [
             Container(
@@ -124,66 +122,73 @@ class _FigureCardState extends State<FigureCard> {
                 ],
               ),
             ),
-            DropdownButton<String>(
-              style: appTheme.dropdownMenuTheme.textStyle,
-              value: widget.figure.currentMode.name,
-              isExpanded: true,
-              iconSize: 0.0,
-              focusColor: kCardColor.withOpacity(0.0),
-              dropdownColor: kCardColor.withOpacity(0.9),
-              onChanged: ((String? value) => updateActiveFigureMode(value!)),
-              items:
-                  getModesNames().map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Center(
-                    child: Text(value.capitalize()),
-                  ),
-                );
-              }).toList(),
-            ),
-            SizedBox(
-              height: widget.figure.currentMode.args.isEmpty ? 30 : 70,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemCount: widget.figure.getNumberColorsArgs(),
-                      itemBuilder: (context, index) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            PickColorButton(
-                                index: index,
-                                updateState: updateFigureColor,
-                                startColor: getColorFromArg(index)),
-                            Text(
-                              "Color $index",
-                              style: kDisplaySmall,
-                            ),
-                          ],
-                        );
-                      }),
-                  Visibility(
-                    visible: widget.figure.getInfoSpeedArgs().$1,
-                    child: Column(
-                      children: [
-                        PickDoubleButton(
-                          updateState: updateFigureSpeed,
-                          startValue: getSpeedFromArg(),
-                        ),
-                        const Text(
-                          "Velocidad",
-                          style: kDisplaySmall,
-                        ),
-                      ],
+            Visibility(
+              visible: cardStatus,
+              child: DropdownButton<String>(
+                style: appTheme.dropdownMenuTheme.textStyle,
+                value: widget.figure.currentMode.name,
+                isExpanded: true,
+                iconSize: 0.0,
+                focusColor: kCardColor.withOpacity(0.0),
+                dropdownColor: kCardColor.withOpacity(0.9),
+                borderRadius: BorderRadius.circular(kCornerRadius),
+                onChanged: ((String? value) => updateActiveFigureMode(value!)),
+                items: getModesNames()
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Center(
+                      child: Text(value.capitalize()),
                     ),
-                  ),
-                ],
+                  );
+                }).toList(),
+              ),
+            ),
+            Visibility(
+              visible: cardStatus,
+              child: SizedBox(
+                height: widget.figure.currentMode.args.isEmpty ? 30 : 70,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemCount: widget.figure.getNumberColorsArgs(),
+                        itemBuilder: (context, index) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              PickColorButton(
+                                  index: index,
+                                  updateState: updateFigureColor,
+                                  startColor: getColorFromArg(index)),
+                              Text(
+                                "Color $index",
+                                style: kDisplaySmall,
+                              ),
+                            ],
+                          );
+                        }),
+                    Visibility(
+                      visible: widget.figure.getInfoSpeedArgs().$1,
+                      child: Column(
+                        children: [
+                          PickDoubleButton(
+                            updateState: updateFigureSpeed,
+                            startValue: getSpeedFromArg(),
+                          ),
+                          const Text(
+                            "Velocidad",
+                            style: kDisplaySmall,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

@@ -67,57 +67,71 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  InkWell(
-                    onTapDown: ((details) {
-                      timer = Timer.periodic(const Duration(milliseconds: 100),
-                          (timer) {
-                        setState(() {
-                          valueIncrease(0.01);
-                        });
-                      });
-                    }),
-                    onTapUp: (details) {
-                      // Stop the timer when the button is released
-                      timer?.cancel();
-                    },
-                    onTapCancel: () {
-                      // Stop the timer if the button press is canceled
-                      timer?.cancel();
-                    },
-                    child: Icon(
-                      Icons.keyboard_arrow_up_outlined,
-                      color: appTheme.primaryColor,
-                    ),
-                  ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: Text(
                       currentValue.toStringAsFixed(2),
                       style: kDisplayLarge,
                     ),
                   ),
-                  InkWell(
-                    onTapDown: ((details) {
-                      timer = Timer.periodic(const Duration(milliseconds: 100),
-                          (timer) {
-                        setState(() {
-                          valueIncrease(-0.01);
-                        });
-                      });
-                    }),
-                    onTapUp: (details) {
-                      // Stop the timer when the button is released
-                      timer?.cancel();
-                    },
-                    onTapCancel: () {
-                      // Stop the timer if the button press is canceled
-                      timer?.cancel();
-                    },
-                    child: Icon(
-                      Icons.keyboard_arrow_down,
-                      color: appTheme.primaryColor,
-                    ),
-                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        InkWell(
+                          customBorder: const CircleBorder(side: BorderSide()),
+                          onTapDown: ((details) {
+                            timer = Timer.periodic(
+                                const Duration(milliseconds: 100), (timer) {
+                              setState(() {
+                                valueIncrease(0.01);
+                              });
+                            });
+                          }),
+                          onTapUp: (details) {
+                            // Stop the timer when the button is released
+                            timer?.cancel();
+                          },
+                          onTapCancel: () {
+                            // Stop the timer if the button press is canceled
+                            timer?.cancel();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              size: 40.0,
+                              Icons.keyboard_arrow_up_outlined,
+                              color: appTheme.primaryColor,
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          customBorder: const CircleBorder(side: BorderSide()),
+                          onTapDown: ((details) {
+                            timer = Timer.periodic(
+                                const Duration(milliseconds: 100), (timer) {
+                              setState(() {
+                                valueIncrease(-0.01);
+                              });
+                            });
+                          }),
+                          onTapUp: (details) {
+                            // Stop the timer when the button is released
+                            timer?.cancel();
+                          },
+                          onTapCancel: () {
+                            // Stop the timer if the button press is canceled
+                            timer?.cancel();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(
+                              size: 40.0,
+                              Icons.keyboard_arrow_down,
+                              color: appTheme.primaryColor,
+                            ),
+                          ),
+                        ),
+                      ]),
                 ],
               ),
               actions: <Widget>[
@@ -136,6 +150,7 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
           });
         });
   }
+
   @override
   void dispose() {
     // Dispose the timer to prevent memory leaks
