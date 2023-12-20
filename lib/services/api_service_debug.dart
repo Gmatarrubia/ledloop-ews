@@ -2,11 +2,16 @@ import 'dart:io';
 
 final path = Directory.current.path;
 File figuresModeJson = File('$path/assets/figures-mode.json');
+File figuresMapJson = File('$path/assets/led-map.json');
 File workModeJson = File('$path/assets/work-mode.json');
 
-////// Specifict functions ////////
+////// Specific functions ////////
 Future<String> readFiguresModeFile() async {
   return readJsonFile(figuresModeJson);
+}
+
+Future<String> readFiguresMapFile() async {
+  return readJsonFile(figuresMapJson);
 }
 
 Future<String> readWorkModeFile() async {

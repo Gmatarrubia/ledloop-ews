@@ -18,6 +18,7 @@ class ApiService {
   static String scriptPath = "/scripts";
   String getConfigScript = "$scriptPath/get-config.py";
   String getInfoScript = "$scriptPath/get-info.py";
+  String getMapScript = "$scriptPath/get-map.py";
   final String setScript = "$scriptPath/post-json.py";
   final String setFigureScript = "$scriptPath/comm-ledloop.py";
 
@@ -44,6 +45,21 @@ class ApiService {
     }
 
     var url = Uri.parse(getBaseUrl() + getInfoScript);
+    var response = await client.get(url);
+    if (response.statusCode == 200) {
+      return response.body;
+    } else {
+      return response.statusCode.toString();
+    }
+  }
+
+  Future<String> getMap() async {
+    //Return offline if kDebugOffLine is true
+    if (kDebugOffLine) {
+      return readFiguresMapFile();
+    }
+
+    var url = Uri.parse(getBaseUrl() + getMapScript);
     var response = await client.get(url);
     if (response.statusCode == 200) {
       return response.body;

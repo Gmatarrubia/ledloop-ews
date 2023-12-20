@@ -23,11 +23,30 @@ class Mode {
   }
 }
 
+class Limits {
+  String pixel;
+  int first;
+  int last;
+  List<int> index = [];
+  Limits(this.pixel, this.first, this.last) {
+    int aux;
+    if (first > last) {
+      aux = first;
+      first = last;
+      last = aux;
+    }
+    index = List.generate(last - first + 1, (i) => first + i);
+  }
+  factory Limits.fromJson(Map<String, dynamic> json) {
+    return Limits(json['pixel'], json['first'], json['last']);
+  }
+}
+
 class Figure {
   String name;
   List<Mode> modes;
-  Mode currentMode =
-      Mode.fromJson(jsonDecode('{"name":"off", "args":[]}'));
+  List<Limits> limits = [];
+  Mode currentMode = Mode.fromJson(jsonDecode('{"name":"off", "args":[]}'));
 
   Figure({required this.name, required this.modes});
 

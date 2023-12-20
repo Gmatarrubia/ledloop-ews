@@ -1,12 +1,60 @@
 {
   "figures": [
     {
-      "name": "complete",
+      "name": "core",
       "modes": [
         {
           "name": "fill",
           "args": [
-            "Color"
+            {
+              "type": "color",
+              "r": 0,
+              "g": 0,
+              "b": 0
+            }
+          ]
+        },
+        {
+          "name": "off",
+          "args": []
+        },
+        {
+          "name": "rainbow",
+          "args": []
+        },
+        {
+          "name": "rainbow_wheel",
+          "args": []
+        },
+        {
+          "name": "pulse",
+          "args": [
+            {
+              "type": "color",
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            {
+              "type": "speed",
+              "value": 0.07
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "horns",
+      "modes": [
+        {
+          "name": "fill",
+          "args": [
+            {
+              "type": "color",
+              "r": 0,
+              "g": 0,
+              "b": 0
+            }
           ]
         },
         {
@@ -16,24 +64,87 @@
         {
           "name": "snake",
           "args": [
-            "Color",
-            "Color",
-            "speed"
+            {
+              "type": "color",
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            {
+              "type": "speed",
+              "value": 0.05
+            }
           ]
         },
         {
           "name": "rainbow",
           "args": []
+        },
+        {
+          "name": "rainbow_wheel",
+          "args": []
         }
       ]
     },
     {
-      "name": "core",
+      "name": "complete",
       "modes": [
         {
           "name": "fill",
           "args": [
-            "color"
+            {
+              "type": "color",
+              "r": 0,
+              "g": 0,
+              "b": 0
+            }
+          ]
+        },
+        {
+          "name": "off",
+          "args": []
+        },
+        {
+          "name": "rainbow",
+          "args": []
+        },
+        {
+          "name": "christmas",
+          "args": [
+            {
+              "type": "color",
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            {
+              "type": "color",
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            {
+              "type": "color",
+              "r": 0,
+              "g": 0,
+              "b": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "nucleo",
+      "modes": [
+        {
+          "name": "fill",
+          "args": [
+            {
+              "type": "color",
+              "r": 0,
+              "g": 0,
+              "b": 0
+            }
           ]
         },
         {
@@ -43,8 +154,16 @@
         {
           "name": "pulse",
           "args": [
-            "Color",
-            "speed"
+            {
+              "type": "color",
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            {
+              "type": "speed",
+              "value": 0.07
+            }
           ]
         }
       ]
