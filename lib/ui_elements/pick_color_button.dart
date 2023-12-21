@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:ews_ledloop/resources/ui_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -51,32 +52,35 @@ class _PickColorButtonState extends State<PickColorButton> {
   Future colorPickerDialog() {
     return showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.white.withOpacity(0.90),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(kCornerRadius)),
-        content: SingleChildScrollView(
-          child: ColorPicker(
-            pickerColor: selectedColor,
-            onColorChanged: changeColor,
-            enableAlpha: false,
-            labelTypes: const [],
+      builder: (context) => BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+        child: AlertDialog(
+          backgroundColor: const Color(0xffffffff),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(kCornerRadius)),
+          content: SingleChildScrollView(
+            child: ColorPicker(
+              pickerColor: selectedColor,
+              onColorChanged: changeColor,
+              enableAlpha: false,
+              labelTypes: const [],
+            ),
           ),
+          actions: <Widget>[
+            TextButton(
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0.0)),
+                  padding: const EdgeInsets.only(
+                      left: 30.0, top: 0.0, right: 30.0, bottom: 0.0)),
+              onPressed: () {
+                widget.updateState(widget.index, selectedColor);
+                Navigator.of(context).pop(false);
+              },
+              child: const Text('Cerrar', style: kDisplayMedium),
+            ),
+          ],
         ),
-        actions: <Widget>[
-          TextButton(
-            style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(0.0)),
-                padding: const EdgeInsets.only(
-                    left: 30.0, top: 0.0, right: 30.0, bottom: 0.0)),
-            onPressed: () {
-              widget.updateState(widget.index, selectedColor);
-              Navigator.of(context).pop(false);
-            },
-            child: const Text('Cerrar', style: kDisplayMedium),
-          ),
-        ],
       ),
     );
   }

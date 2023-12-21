@@ -130,7 +130,7 @@ class _FigureCardState extends State<FigureCard> {
                 isExpanded: true,
                 iconSize: 0.0,
                 focusColor: kCardColor.withOpacity(0.0),
-                dropdownColor: kCardColor.withOpacity(0.9),
+                dropdownColor: kCardColor,
                 borderRadius: BorderRadius.circular(kCornerRadius),
                 onChanged: ((String? value) => updateActiveFigureMode(value!)),
                 items: getModesNames()
@@ -147,7 +147,7 @@ class _FigureCardState extends State<FigureCard> {
             Visibility(
               visible: cardStatus,
               child: SizedBox(
-                height: widget.figure.currentMode.args.isEmpty ? 30 : 70,
+                height: widget.figure.currentMode.args.isEmpty ? 30 : 85,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.center,

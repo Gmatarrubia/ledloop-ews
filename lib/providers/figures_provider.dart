@@ -5,7 +5,7 @@ import 'package:ews_ledloop/model/figures.dart';
 import 'package:ews_ledloop/services/api_service.dart';
 
 class FiguresProvider with ChangeNotifier {
-  FiguresModel figureModel = FiguresModel.fromJson('{"figures":[]}');
+  FiguresModel figureModel = FiguresModel.fromJson('{"figures":[], "modes":[]}');
   Map<String, bool> enableFigureModel = {};
   Map<String, dynamic> figureMap = {};
   Map<String, List<String>> incompats = {};

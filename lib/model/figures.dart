@@ -50,10 +50,16 @@ class Figure {
 
   Figure({required this.name, required this.modes});
 
-  factory Figure.fromJson(Map<String, dynamic> json) {
-    List<dynamic> jsonModes = json['modes'];
-    List<Mode> modes = jsonModes.map((json) => Mode.fromJson(json)).toList();
-
+  factory Figure.fromJson(Map<String, dynamic> json, List<Mode> allModes) {
+    List<dynamic> figureModes = json['modes'];
+    List<Mode> modes = [];
+    for (final figureMode in figureModes){
+      for(final mode in allModes) {
+        if (figureMode == mode.name){
+          modes.add(mode);
+        }
+      }
+    }
     return Figure(
       name: json['name'],
       modes: modes,
@@ -95,16 +101,20 @@ class Figure {
 
 class FiguresModel {
   List<Figure> figures;
+  List<Mode> modes;
 
-  FiguresModel({required this.figures});
+  FiguresModel({required this.figures, required this.modes});
 
   factory FiguresModel.fromJson(String jsonStr) {
     Map<String, dynamic> jsonData = json.decode(jsonStr);
     List<dynamic> jsonFigures = jsonData['figures'];
+    List<dynamic> jsonModes = jsonData['modes'];
+    List<Mode> modes =
+        jsonModes.map((json) => Mode.fromJson(json)).toList();
     List<Figure> figures =
-        jsonFigures.map((json) => Figure.fromJson(json)).toList();
+        jsonFigures.map((json) => Figure.fromJson(json, modes)).toList();
 
-    return FiguresModel(figures: figures);
+    return FiguresModel(figures: figures, modes: modes);
   }
 
   String toJson() {
