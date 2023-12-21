@@ -9,7 +9,7 @@ String getBaseUrl() {
   if (kIsWeb) {
     return '';
   } else {
-    return "http://ideafix.local";
+    return "http://ledloop.local";
   }
 }
 
