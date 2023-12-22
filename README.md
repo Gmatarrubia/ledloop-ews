@@ -1,16 +1,19 @@
-# ews_ledloop
+# Ews_ledloop
 
-A new Flutter project.
+This is a Led Strip Controller App written in Flutter. It is mainly focused on being the embedded web service (EWS), but it can also work as an Android or desktop app.
 
-## Getting Started
+This repo is part of **The Ledloop Project**, a bigger project you can find here: https://github.com/Gmatarrubia/ledloop-yocto
 
-This project is a starting point for a Flutter application.
+For further information go there.
 
-A few resources to get you started if this is your first Flutter project:
+## Screenshots
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<div align="center">
+  <img src="docs/app1.jpeg" width="200" hspace="10">
+  <img src="docs/app2.jpeg" width="200" hspace="10">
+</div>
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<div align="center">
+  <img src="docs/app3.jpeg" width="200" hspace="10">
+  <img src="docs/app4.jpeg" width="200" hspace="10">
+</div>
