@@ -25,6 +25,7 @@
       "name": "complete",
       "modes": [
         "fill",
+        "bicolor",
         "rainbow",
         "rainbow_wheel",
         "christmas",
@@ -160,6 +161,17 @@
           "name": "speed",
           "delta": 0.01,
           "value": 0.1
+        }
+      ]
+    },
+    {
+      "name" : "shining stars",
+      "args": [
+        {
+          "type": "color",
+          "r": 0,
+          "g": 0,
+          "b": 0
         }
       ]
     }
