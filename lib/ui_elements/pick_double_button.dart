@@ -1,14 +1,16 @@
 import 'dart:async';
+import 'dart:ffi';
 import 'dart:ui';
 import 'package:ews_ledloop/resources/ui_constants.dart';
 import 'package:flutter/material.dart';
+import 'package:ews_ledloop/model/figures.dart';
 
 class PickDoubleButton extends StatefulWidget {
   const PickDoubleButton(
-      {super.key, required this.updateState, required this.startValue});
+      {super.key, required this.updateState, required this.arg});
 
   final Function updateState;
-  final double startValue;
+  final DoubleArg arg;
 
   @override
   State<PickDoubleButton> createState() => _PickDoubleButtonState();
@@ -19,7 +21,7 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
   Timer? timer;
 
   double getStartValue() {
-    return widget.startValue;
+    return widget.arg.value;
   }
 
   void valueIncrease(double incease) {
@@ -84,14 +86,14 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
                                 const CircleBorder(side: BorderSide()),
                             onTap: (() {
                               setState(() {
-                                valueIncrease(0.01);
+                                valueIncrease(widget.arg.delta);
                               });
                             }),
                             onTapDown: ((details) {
                               timer = Timer.periodic(
                                   const Duration(milliseconds: 200), (timer) {
                                 setState(() {
-                                  valueIncrease(0.01);
+                                  valueIncrease(widget.arg.delta);
                                 });
                               });
                             }),
@@ -117,14 +119,14 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
                                 const CircleBorder(side: BorderSide()),
                              onTap: (() {
                               setState(() {
-                                valueIncrease(-0.01);
+                                valueIncrease(-widget.arg.delta);
                               });
                             }),
                             onTapDown: ((details) {
                               timer = Timer.periodic(
                                   const Duration(milliseconds: 200), (timer) {
                                 setState(() {
-                                  valueIncrease(-0.01);
+                                  valueIncrease(-widget.arg.delta);
                                 });
                               });
                             }),

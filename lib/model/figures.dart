@@ -42,6 +42,13 @@ class Limits {
   }
 }
 
+class DoubleArg {
+  double value;
+  String name;
+  double delta;
+  DoubleArg({required this.name, required this.value, required this.delta});
+}
+
 class Figure {
   String name;
   List<Mode> modes;
@@ -53,9 +60,9 @@ class Figure {
   factory Figure.fromJson(Map<String, dynamic> json, List<Mode> allModes) {
     List<dynamic> figureModes = json['modes'];
     List<Mode> modes = [];
-    for (final figureMode in figureModes){
-      for(final mode in allModes) {
-        if (figureMode == mode.name){
+    for (final figureMode in figureModes) {
+      for (final mode in allModes) {
+        if (figureMode == mode.name) {
           modes.add(mode);
         }
       }
@@ -83,19 +90,20 @@ class Figure {
     return num;
   }
 
-  (bool, int, double) getInfoSpeedArgs() {
-    bool hasSpeedArg = false;
+  (bool, int, DoubleArg) getDoubleArgs() {
+    bool hasDoubleArg = false;
     int pos = 0;
-    double value = 0.0;
+    DoubleArg myDoubleArg = DoubleArg(name: "  ", value: 0.0, delta: 0.0);
     for (final arg in currentMode.args) {
-      if (arg["type"] == "speed") {
-        hasSpeedArg = true;
-        value = arg["value"];
+      if (arg["type"] == "double") {
+        hasDoubleArg = true;
+        myDoubleArg = DoubleArg(
+            name: arg["name"], value: arg["value"], delta: arg["delta"]);
         break;
       }
       pos++;
     }
-    return (hasSpeedArg, pos, value);
+    return (hasDoubleArg, pos, myDoubleArg);
   }
 }
 
@@ -109,8 +117,7 @@ class FiguresModel {
     Map<String, dynamic> jsonData = json.decode(jsonStr);
     List<dynamic> jsonFigures = jsonData['figures'];
     List<dynamic> jsonModes = jsonData['modes'];
-    List<Mode> modes =
-        jsonModes.map((json) => Mode.fromJson(json)).toList();
+    List<Mode> modes = jsonModes.map((json) => Mode.fromJson(json)).toList();
     List<Figure> figures =
         jsonFigures.map((json) => Figure.fromJson(json, modes)).toList();
 

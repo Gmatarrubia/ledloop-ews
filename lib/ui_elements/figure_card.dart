@@ -55,15 +55,19 @@ class _FigureCardState extends State<FigureCard> {
   }
 
   void updateFigureSpeed(double value) {
-    var (hasSpeed, argPos, speed) = widget.figure.getInfoSpeedArgs();
+    var (hasSpeed, argPos, myDoubleArg) = widget.figure.getDoubleArgs();
     String valueString = value.toStringAsFixed(2);
-    String newSpeedString = '''
+    String name = myDoubleArg.name;
+    String delta = myDoubleArg.delta.toString();
+    String newDoubleString = '''
   {
-    "type" : "speed",
-    "value" : $valueString
+    "type" : "double",
+    "name" : "$name",
+    "value" : $valueString,
+    "delta": $delta
   }
 ''';
-    widget.figure.currentMode.args[argPos] = jsonDecode(newSpeedString);
+    widget.figure.currentMode.args[argPos] = jsonDecode(newDoubleString);
   }
 
   Color getColorFromArg(i) {
@@ -78,12 +82,12 @@ class _FigureCardState extends State<FigureCard> {
     }
   }
 
-  double getSpeedFromArg() {
-    var speed = 0.5;
+  DoubleArg getDoubleFromArg() {
+    DoubleArg doubleArg = DoubleArg(name: "  ", value: 0.0, delta: 0.0);
     bool hasSpeed = false;
     int argPos = 0;
-    (hasSpeed, argPos, speed) = widget.figure.getInfoSpeedArgs();
-    return speed;
+    (hasSpeed, argPos, doubleArg) = widget.figure.getDoubleArgs();
+    return doubleArg;
   }
 
   void changeCardState(FiguresProvider figureProvider, bool currentStatus) {
@@ -173,15 +177,15 @@ class _FigureCardState extends State<FigureCard> {
                           );
                         }),
                     Visibility(
-                      visible: widget.figure.getInfoSpeedArgs().$1,
+                      visible: widget.figure.getDoubleArgs().$1,
                       child: Column(
                         children: [
                           PickDoubleButton(
                             updateState: updateFigureSpeed,
-                            startValue: getSpeedFromArg(),
+                            arg: getDoubleFromArg(),
                           ),
-                          const Text(
-                            "Velocidad",
+                          Text(
+                            getDoubleFromArg().name.capitalize(),
                             style: kDisplaySmall,
                           ),
                         ],
