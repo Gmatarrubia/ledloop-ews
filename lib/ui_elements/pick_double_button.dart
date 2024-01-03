@@ -6,8 +6,12 @@ import 'package:ews_ledloop/model/figures.dart';
 
 class PickDoubleButton extends StatefulWidget {
   const PickDoubleButton(
-      {super.key, required this.updateState, required this.arg});
+      {super.key,
+      required this.index,
+      required this.updateState,
+      required this.arg});
 
+  final int index;
   final Function updateState;
   final DoubleArg arg;
 
@@ -25,7 +29,7 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
 
   void valueIncrease(double incease) {
     currentValue = currentValue + incease;
-    widget.updateState(currentValue);
+    widget.updateState(widget.index, currentValue);
     setState(() {});
     return;
   }
@@ -33,10 +37,12 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 0.0),
       child: MaterialButton(
-        elevation: 10.0,
         height: 46.0,
+        minWidth: 70.0,
+        elevation: 10.0,
+        padding: const EdgeInsets.all(0),
         shape: const CircleBorder(side: BorderSide(width: 1.0)),
         color: const Color(0xffffffff),
         onPressed: (() {
@@ -116,7 +122,7 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
                           InkWell(
                             customBorder:
                                 const CircleBorder(side: BorderSide()),
-                             onTap: (() {
+                            onTap: (() {
                               setState(() {
                                 valueIncrease(-widget.arg.delta);
                               });
@@ -155,7 +161,7 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
                         padding: const EdgeInsets.only(
                             left: 30.0, top: 0.0, right: 30.0, bottom: 0.0)),
                     onPressed: () {
-                      widget.updateState(currentValue);
+                      widget.updateState(widget.index, currentValue);
                       Navigator.of(context).pop(false);
                     },
                     child: const Text('Cerrar', style: kDisplayLarge),

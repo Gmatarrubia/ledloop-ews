@@ -54,20 +54,20 @@ class _FigureCardState extends State<FigureCard> {
     setState(() {});
   }
 
-  void updateFigureSpeed(double value) {
-    var (hasSpeed, argPos, myDoubleArg) = widget.figure.getDoubleArgs();
-    String valueString = value.toStringAsFixed(2);
+  void updateFigureDouble(int index, double value) {
+    DoubleArg myDoubleArg = getDoubleFromArg(index);
     String name = myDoubleArg.name;
-    String delta = myDoubleArg.delta.toString();
+    String valueString = value.toStringAsFixed(2);
+    String deltaString = myDoubleArg.delta.toString();
     String newDoubleString = '''
   {
     "type" : "double",
     "name" : "$name",
     "value" : $valueString,
-    "delta": $delta
+    "delta": $deltaString
   }
 ''';
-    widget.figure.currentMode.args[argPos] = jsonDecode(newDoubleString);
+    widget.figure.currentMode.args[index] = jsonDecode(newDoubleString);
   }
 
   Color getColorFromArg(i) {
@@ -82,12 +82,15 @@ class _FigureCardState extends State<FigureCard> {
     }
   }
 
-  DoubleArg getDoubleFromArg() {
-    DoubleArg doubleArg = DoubleArg(name: "  ", value: 0.0, delta: 0.0);
-    bool hasSpeed = false;
-    int argPos = 0;
-    (hasSpeed, argPos, doubleArg) = widget.figure.getDoubleArgs();
-    return doubleArg;
+  DoubleArg getDoubleFromArg(int i) {
+    if (widget.figure.currentMode.args[i]["type"] == "double") {
+      return DoubleArg(
+          name: widget.figure.currentMode.args[i]["name"],
+          value: widget.figure.currentMode.args[i]["value"],
+          delta: widget.figure.currentMode.args[i]["delta"]);
+    } else {
+      return DoubleArg(name: "  ", value: 0.0, delta: 0.0);
+    }
   }
 
   void changeCardState(FiguresProvider figureProvider, bool currentStatus) {
@@ -101,6 +104,7 @@ class _FigureCardState extends State<FigureCard> {
       bool cardStatus = figureProvider.isFigureEnabled(widget.figure.name);
       return Card(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               alignment: Alignment.centerLeft,
@@ -160,7 +164,7 @@ class _FigureCardState extends State<FigureCard> {
                     ListView.builder(
                         scrollDirection: Axis.horizontal,
                         shrinkWrap: true,
-                        itemCount: widget.figure.getNumberColorsArgs(),
+                        itemCount: widget.figure.getNumberTypeArgs("color"),
                         itemBuilder: (context, index) {
                           return Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -176,21 +180,32 @@ class _FigureCardState extends State<FigureCard> {
                             ],
                           );
                         }),
-                    Visibility(
-                      visible: widget.figure.getDoubleArgs().$1,
-                      child: Column(
-                        children: [
-                          PickDoubleButton(
-                            updateState: updateFigureSpeed,
-                            arg: getDoubleFromArg(),
-                          ),
-                          Text(
-                            getDoubleFromArg().name.capitalize(),
-                            style: kDisplaySmall,
-                          ),
-                        ],
-                      ),
-                    ),
+                    ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemCount: widget.figure.getNumberTypeArgs("double"),
+                        itemBuilder: (context, index) {
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              PickDoubleButton(
+                                  index: index +
+                                      widget.figure.getNumberTypeArgs("color"),
+                                  updateState: updateFigureDouble,
+                                  arg: getDoubleFromArg(index +
+                                      widget.figure
+                                          .getNumberTypeArgs("color"))),
+                              Text(
+                                getDoubleFromArg(index +
+                                        widget.figure
+                                            .getNumberTypeArgs("color"))
+                                    .name
+                                    .capitalize(),
+                                style: kDisplaySmall,
+                              ),
+                            ],
+                          );
+                        }),
                   ],
                 ),
               ),

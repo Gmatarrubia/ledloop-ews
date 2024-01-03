@@ -35,10 +35,12 @@ class _PickColorButtonState extends State<PickColorButton> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(5.0),
+      padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 0.0),
       child: MaterialButton(
         height: 46.0,
+        minWidth: 70.0,
         elevation: 10.0,
+        padding: const EdgeInsets.all(0),
         shape: const CircleBorder(side: BorderSide(width: 1.0)),
         color: selectedColor,
         onPressed: (() {

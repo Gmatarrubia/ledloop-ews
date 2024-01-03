@@ -80,30 +80,14 @@ class Figure {
     };
   }
 
-  int getNumberColorsArgs() {
+  int getNumberTypeArgs(String type) {
     int num = 0;
     for (final arg in currentMode.args) {
-      if (arg["type"] == "color") {
+      if (arg["type"] == type) {
         num++;
       }
     }
     return num;
-  }
-
-  (bool, int, DoubleArg) getDoubleArgs() {
-    bool hasDoubleArg = false;
-    int pos = 0;
-    DoubleArg myDoubleArg = DoubleArg(name: "  ", value: 0.0, delta: 0.0);
-    for (final arg in currentMode.args) {
-      if (arg["type"] == "double") {
-        hasDoubleArg = true;
-        myDoubleArg = DoubleArg(
-            name: arg["name"], value: arg["value"], delta: arg["delta"]);
-        break;
-      }
-      pos++;
-    }
-    return (hasDoubleArg, pos, myDoubleArg);
   }
 }
 
