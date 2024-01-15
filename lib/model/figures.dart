@@ -43,10 +43,14 @@ class Limits {
 }
 
 class DoubleArg {
-  double value;
+  double value, delta, min, max;
   String name;
-  double delta;
-  DoubleArg({required this.name, required this.value, required this.delta});
+  DoubleArg(
+      {required this.name,
+      required this.value,
+      required this.delta,
+      required this.min,
+      required this.max});
 }
 
 class Figure {

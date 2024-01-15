@@ -21,12 +21,15 @@ class PickColorButton extends StatefulWidget {
 class _PickColorButtonState extends State<PickColorButton> {
   late Color selectedColor = getStartColor();
   Color currentColor = const Color(0x00000000);
+  bool startingValue = true;
+
 
   Color getStartColor() {
     return widget.startColor;
   }
 
   void changeColor(Color color) {
+    startingValue = false;
     setState(() {
       selectedColor = color;
     });
@@ -34,6 +37,10 @@ class _PickColorButtonState extends State<PickColorButton> {
 
   @override
   Widget build(BuildContext context) {
+    if (startingValue == true) {
+      selectedColor = getStartColor();
+    }
+    startingValue = true;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 0.0),
       child: MaterialButton(

@@ -51,20 +51,23 @@ class _FigureCardState extends State<FigureCard> {
   }
 ''';
     widget.figure.currentMode.args[index] = jsonDecode(newColorString);
-    setState(() {});
   }
 
   void updateFigureDouble(int index, double value) {
     DoubleArg myDoubleArg = getDoubleFromArg(index);
     String name = myDoubleArg.name;
     String valueString = value.toStringAsFixed(2);
-    String deltaString = myDoubleArg.delta.toString();
+    String deltaString = myDoubleArg.delta.toStringAsFixed(2);
+    String minString = myDoubleArg.min.toStringAsFixed(2);
+    String maxString = myDoubleArg.max.toStringAsFixed(2);
     String newDoubleString = '''
   {
     "type" : "double",
     "name" : "$name",
     "value" : $valueString,
-    "delta": $deltaString
+    "delta": $deltaString,
+    "min": $minString,
+    "max": $maxString
   }
 ''';
     widget.figure.currentMode.args[index] = jsonDecode(newDoubleString);
@@ -87,10 +90,28 @@ class _FigureCardState extends State<FigureCard> {
       return DoubleArg(
           name: widget.figure.currentMode.args[i]["name"],
           value: widget.figure.currentMode.args[i]["value"],
-          delta: widget.figure.currentMode.args[i]["delta"]);
+          delta: widget.figure.currentMode.args[i]["delta"],
+          min: widget.figure.currentMode.args[i]["min"],
+          max: widget.figure.currentMode.args[i]["max"]);
     } else {
-      return DoubleArg(name: "  ", value: 0.0, delta: 0.0);
+      return DoubleArg(name: "  ", value: 0.0, delta: 0.0, min: 0.0, max: 1.0);
     }
+  }
+
+  DoubleArg getInitialDoubleArg(int index) {
+    var positionArgs = getDoubleFromArg(index);
+    for (final mode in widget.figure.modes) {
+      if (mode.name == widget.figure.currentMode.name) {
+        widget.figure.currentMode.args[index] = mode.args[index];
+        return DoubleArg(
+            name: mode.args[index]["name"],
+            value: mode.args[index]["value"],
+            delta: mode.args[index]["delta"],
+            min: mode.args[index]["min"],
+            max: mode.args[index]["max"]);
+      }
+    }
+    return positionArgs;
   }
 
   void changeCardState(FiguresProvider figureProvider, bool currentStatus) {
@@ -189,12 +210,12 @@ class _FigureCardState extends State<FigureCard> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               PickDoubleButton(
-                                  index: index +
-                                      widget.figure.getNumberTypeArgs("color"),
-                                  updateState: updateFigureDouble,
-                                  arg: getDoubleFromArg(index +
-                                      widget.figure
-                                          .getNumberTypeArgs("color"))),
+                                index: index +
+                                    widget.figure.getNumberTypeArgs("color"),
+                                updateState: updateFigureDouble,
+                                arg: getInitialDoubleArg(index +
+                                    widget.figure.getNumberTypeArgs("color")),
+                              ),
                               Text(
                                 getDoubleFromArg(index +
                                         widget.figure

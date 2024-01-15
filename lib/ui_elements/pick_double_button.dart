@@ -21,6 +21,7 @@ class PickDoubleButton extends StatefulWidget {
 
 class _PickDoubleButtonState extends State<PickDoubleButton> {
   late double currentValue = getStartValue();
+  bool startingValue = false;
   Timer? timer;
 
   double getStartValue() {
@@ -28,14 +29,23 @@ class _PickDoubleButtonState extends State<PickDoubleButton> {
   }
 
   void valueIncrease(double incease) {
-    currentValue = currentValue + incease;
+    var newValue = currentValue + incease;
+    if (newValue > widget.arg.max || newValue < widget.arg.min) {
+      newValue = currentValue;
+    }
+    currentValue = newValue;
     widget.updateState(widget.index, currentValue);
+    startingValue = false;
     setState(() {});
     return;
   }
 
   @override
   Widget build(BuildContext context) {
+    if (startingValue == true) {
+      currentValue = getStartValue();
+    }
+    startingValue = true;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 0.0),
       child: MaterialButton(
