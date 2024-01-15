@@ -21,6 +21,7 @@ class ApiService {
   String getMapScript = "$scriptPath/get-map.py";
   final String setScript = "$scriptPath/post-json.py";
   final String setFigureScript = "$scriptPath/comm-ledloop.py";
+  final String restoreScript = "$scriptPath/restore-last-mode.py";
 
   // GET
   Future<dynamic> getConfiguration() async {
@@ -105,6 +106,21 @@ class ApiService {
         'Content-Type': 'application/json',
       },
       body: newConfig,
+    );
+    if (response.statusCode == 200) {
+      return "Éxito";
+    } else {
+      return response.statusCode.toString();
+    }
+  }
+
+  Future<dynamic> sendRestoreLastModeAction() async {
+    var url = Uri.parse(getBaseUrl() + restoreScript);
+    var response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
     );
     if (response.statusCode == 200) {
       return "Éxito";

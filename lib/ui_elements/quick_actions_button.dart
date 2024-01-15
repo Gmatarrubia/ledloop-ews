@@ -1,61 +1,87 @@
 import 'package:flutter/material.dart';
 import 'package:ews_ledloop/services/api_service.dart';
 import 'package:ews_ledloop/resources/ui_constants.dart';
-import 'package:ews_ledloop/providers/figures_provider.dart';
+import 'package:ews_ledloop/resources/led_work.modes.dart';
 
 class QuickActionsButton extends StatelessWidget {
   const QuickActionsButton({
     super.key,
-    required this.figureProvider,
     required this.api,
   });
 
-  final FiguresProvider figureProvider;
   final ApiService api;
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
       padding: const EdgeInsets.all(8.0),
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(kCornerRadius)),
+      shape: const RoundedRectangleBorder(
+          borderRadius:
+              BorderRadius.only(topLeft: Radius.circular(kCornerRadius))),
       minWidth: double.infinity,
       height: 70.0,
-      color: appTheme.secondaryHeaderColor,
+      color: appTheme.primaryColor,
       onPressed: () {
         _displayBottomSheet(context);
       },
       child: const Icon(
-        Icons.play_arrow,
+        color: kTextColor,
+        Icons.flash_on,
       ),
     );
   }
 
   Future _displayBottomSheet(BuildContext context) {
     return showModalBottomSheet(
+      constraints: const BoxConstraints.expand(height: 100.0),
+      backgroundColor: appTheme.primaryColor,
       showDragHandle: false,
       context: context,
       builder: (BuildContext context) {
-        return Column(
-          mainAxisSize: MainAxisSize.min,
+        return Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ListTile(
-              leading: Icon(Icons.add),
-              title: Text('Agregar'),
-              onTap: () {
-                // Acción cuando se toca la opción de agregar
-                Navigator.pop(context);
-              },
+            Flexible(
+              flex: 1,
+              child: ListTile(
+                title: const Icon(color: kTextColor, Icons.power_settings_new),
+                onTap: () {
+                  FigureWorkMode model2Send =
+                      FigureWorkMode("complete", "off", []);
+                  print(model2Send.stringWorkMode);
+                  api.setConfiguration(model2Send.stringWorkMode);
+                  Navigator.pop(context);
+                },
+              ),
             ),
-            ListTile(
-              leading: Icon(Icons.edit),
-              title: Text('Editar'),
-              onTap: () {
-                // Acción cuando se toca la opción de editar
-                Navigator.pop(context);
-              },
+            Flexible(
+              flex: 1,
+              child: ListTile(
+                title: const Icon(color: kTextColor, Icons.lightbulb),
+                onTap: () {
+                  const List<Color> warmWhite = [Color.fromARGB(255, 200, 255, 147)];
+                  FigureWorkMode model2Send = FigureWorkMode(
+                    "complete",
+                    "fill",
+                    warmWhite
+                  );
+                  print(model2Send.stringWorkMode);
+                  api.setConfiguration(model2Send.stringWorkMode);
+                  Navigator.pop(context);
+                },
+              ),
             ),
-            // Agrega más opciones según sea necesario
+            Flexible(
+              flex: 1,
+              child: ListTile(
+                title: const Icon(color: kTextColor, Icons.undo),
+                onTap: () {
+                  api.sendRestoreLastModeAction();
+                  Navigator.pop(context);
+                },
+              ),
+            ),
           ],
         );
       },

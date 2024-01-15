@@ -10,13 +10,14 @@ class FigureWorkMode {
   FigureWorkMode(this.figureName, this.mode, this.args) {
     stringWorkMode = setString(figureName, mode);
     Map<String, dynamic> workJson = json.decode(stringWorkMode);
-    //only working for fill
-    //for (final arg in args) {
-    int r = args[0].red;
-    int g = args[0].green;
-    int b = args[0].blue;
-    String color = '{"r": $r, "g": $g, "b": $b}';
-    workJson[figureName]['args'] = json.decode(color);
+    List<dynamic> colors = [];
+    for (final arg in args) {
+      int r = arg.red;
+      int g = arg.green;
+      int b = arg.blue;
+      colors.add(json.decode('{"r": $r, "g": $g, "b": $b}'));
+    }
+    workJson[figureName]['args'] = colors;
     stringWorkMode = json.encode(workJson);
   }
 
@@ -25,7 +26,7 @@ class FigureWorkMode {
 {
   "$figureName":
   {
-    "mode": "$mode",
+    "name": "$mode",
     "args":
     {
     }

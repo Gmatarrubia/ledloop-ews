@@ -60,33 +60,25 @@ class FiguresView extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(
-                vertical: 5.0,
-                horizontal: 15.0,
-              ),
-              child: Row(
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: QuickActionsButton(
-                      api: api,
-                      figureProvider: figureProvider,
-                    ),
+            Row(
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: QuickActionsButton(
+                    api: api,
                   ),
-                  Flexible(
-                    flex: 2,
-                    child: ApplyButton(
-                      api: api,
-                      buttonAction: (() {
-                        String model2Send = figureProvider.getModel2Send();
-                        print(model2Send);
-                        api.setConfiguration(model2Send);
-                      }),
-                    ),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: ApplyButton(
+                    buttonAction: (() {
+                      String model2Send = figureProvider.getModel2Send();
+                      print(model2Send);
+                      api.setConfiguration(model2Send);
+                    }),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ],
         );
