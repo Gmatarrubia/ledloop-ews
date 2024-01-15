@@ -5,6 +5,7 @@ import 'package:ews_ledloop/ui_elements/figure_card.dart';
 import 'package:ews_ledloop/resources/ui_constants.dart';
 import 'package:ews_ledloop/providers/figures_provider.dart';
 import 'package:ews_ledloop/ui_elements/apply_button.dart';
+import 'package:ews_ledloop/ui_elements/quick_actions_button.dart';
 
 class FiguresView extends StatelessWidget {
   FiguresView({super.key});
@@ -58,13 +59,31 @@ class FiguresView extends StatelessWidget {
                 ),
               ),
             ),
-            ApplyButton(
-              api: api,
-              buttonAction: (() {
-                String model2Send = figureProvider.getModel2Send();
-                print(model2Send);
-                api.setConfiguration(model2Send);
-              }),
+            Row(
+              children: [
+                Flexible(
+                  flex: 1,
+                  child: QuickActionsButton(
+                    api: api,
+                    buttonAction: (() {
+                      String model2Send = figureProvider.getModel2Send();
+                      print(model2Send);
+                      api.setConfiguration(model2Send);
+                    }),
+                  ),
+                ),
+                Flexible(
+                  flex: 2,
+                  child: ApplyButton(
+                    api: api,
+                    buttonAction: (() {
+                      String model2Send = figureProvider.getModel2Send();
+                      print(model2Send);
+                      api.setConfiguration(model2Send);
+                    }),
+                  ),
+                ),
+              ],
             ),
           ],
         );
