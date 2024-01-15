@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ews_ledloop/services/api_service.dart';
 import 'package:ews_ledloop/ui_elements/figure_card.dart';
-import 'package:ews_ledloop/resources/ui_constants.dart';
+import 'package:ews_ledloop/ui_elements/snack_bar.dart';
 import 'package:ews_ledloop/providers/figures_provider.dart';
 import 'package:ews_ledloop/ui_elements/apply_button.dart';
 import 'package:ews_ledloop/ui_elements/quick_actions_button.dart';
@@ -71,10 +71,17 @@ class FiguresView extends StatelessWidget {
                 Flexible(
                   flex: 2,
                   child: ApplyButton(
-                    buttonAction: (() {
+                    buttonAction: (() async {
                       String model2Send = figureProvider.getModel2Send();
                       print(model2Send);
-                      api.setConfiguration(model2Send);
+                      var response = await api.setConfiguration(model2Send);
+                      if (!context.mounted) return;
+                      if (response == 200) {
+                        showSnackBar(context, "Modo cambiado con éxito");
+                      }
+                      else {
+                        showSnackBar(context, "Error código: $response");
+                      }
                     }),
                   ),
                 ),

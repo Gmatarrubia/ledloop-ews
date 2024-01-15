@@ -85,18 +85,14 @@ class ApiService {
       },
       body: newConfig,
     );
-    if (response.statusCode == 200) {
-      return "Éxito";
-    } else {
-      return response.statusCode.toString();
-    }
+    return response.statusCode;
   }
 
   Future<dynamic> setFigureConfig(String newConfig) async {
     //Return offline if kDebugOffLine is true
     if (kDebugOffLine) {
       writeWorkModeFile(newConfig);
-      return "Éxito";
+      return 200;
     }
 
     var url = Uri.parse(getBaseUrl() + setFigureScript);
@@ -107,11 +103,7 @@ class ApiService {
       },
       body: newConfig,
     );
-    if (response.statusCode == 200) {
-      return "Éxito";
-    } else {
-      return response.statusCode.toString();
-    }
+    return response.statusCode;
   }
 
   Future<dynamic> sendRestoreLastModeAction() async {
@@ -122,10 +114,6 @@ class ApiService {
         'Content-Type': 'application/json',
       },
     );
-    if (response.statusCode == 200) {
-      return "Éxito";
-    } else {
-      return response.statusCode.toString();
-    }
+    return response.statusCode;
   }
 }

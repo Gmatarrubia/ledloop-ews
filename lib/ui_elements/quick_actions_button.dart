@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ews_ledloop/services/api_service.dart';
 import 'package:ews_ledloop/resources/ui_constants.dart';
 import 'package:ews_ledloop/resources/led_work.modes.dart';
+import 'package:ews_ledloop/ui_elements/snack_bar.dart';
 
 class QuickActionsButton extends StatelessWidget {
   const QuickActionsButton({
@@ -46,12 +47,19 @@ class QuickActionsButton extends StatelessWidget {
               flex: 1,
               child: ListTile(
                 title: const Icon(color: kTextColor, Icons.power_settings_new),
-                onTap: () {
+                onTap: () async {
                   FigureWorkMode model2Send =
                       FigureWorkMode("complete", "off", []);
                   print(model2Send.stringWorkMode);
-                  api.setConfiguration(model2Send.stringWorkMode);
+                  var response =
+                      await api.setConfiguration(model2Send.stringWorkMode);
+                  if (!context.mounted) return;
                   Navigator.pop(context);
+                  if (response == 200) {
+                    showSnackBar(context, "Apagado rápido exitoso");
+                  } else {
+                    showSnackBar(context, "Error código: $response");
+                  }
                 },
               ),
             ),
@@ -59,16 +67,22 @@ class QuickActionsButton extends StatelessWidget {
               flex: 1,
               child: ListTile(
                 title: const Icon(color: kTextColor, Icons.lightbulb),
-                onTap: () {
-                  const List<Color> warmWhite = [Color.fromARGB(255, 200, 255, 147)];
-                  FigureWorkMode model2Send = FigureWorkMode(
-                    "complete",
-                    "fill",
-                    warmWhite
-                  );
+                onTap: () async {
+                  const List<Color> warmWhite = [
+                    Color.fromARGB(255, 200, 255, 147)
+                  ];
+                  FigureWorkMode model2Send =
+                      FigureWorkMode("complete", "fill", warmWhite);
                   print(model2Send.stringWorkMode);
-                  api.setConfiguration(model2Send.stringWorkMode);
+                  var response =
+                      await api.setConfiguration(model2Send.stringWorkMode);
+                  if (!context.mounted) return;
                   Navigator.pop(context);
+                  if (response == 200) {
+                    showSnackBar(context, "Encendido rápido exitoso");
+                  } else {
+                    showSnackBar(context, "Error código: $response");
+                  }
                 },
               ),
             ),
@@ -76,9 +90,15 @@ class QuickActionsButton extends StatelessWidget {
               flex: 1,
               child: ListTile(
                 title: const Icon(color: kTextColor, Icons.undo),
-                onTap: () {
-                  api.sendRestoreLastModeAction();
+                onTap: () async {
+                  var response = await api.sendRestoreLastModeAction();
+                  if (!context.mounted) return;
                   Navigator.pop(context);
+                  if (response == 200) {
+                    showSnackBar(context, "Aplicado modo anterior con éxito");
+                  } else {
+                    showSnackBar(context, "Error código: $response");
+                  }
                 },
               ),
             ),
