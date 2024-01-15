@@ -15,6 +15,9 @@ class ApplyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
+      padding: const EdgeInsets.all(8.0),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kCornerRadius)),
       minWidth: double.infinity,
       height: 70.0,
       color: appTheme.primaryColorDark,

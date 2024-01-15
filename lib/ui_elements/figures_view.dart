@@ -35,10 +35,11 @@ class FiguresView extends StatelessWidget {
           children: [
             Center(
               child: Container(
-                padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 60.0),
+                padding: const EdgeInsets.fromLTRB(12.0, 0.0, 12.0, 30.0),
                 alignment: Alignment.center,
                 child: ScrollConfiguration(
-                  behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                  behavior: ScrollConfiguration.of(context)
+                      .copyWith(scrollbars: false),
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     physics: const AlwaysScrollableScrollPhysics(),
@@ -59,31 +60,33 @@ class FiguresView extends StatelessWidget {
                 ),
               ),
             ),
-            Row(
-              children: [
-                Flexible(
-                  flex: 1,
-                  child: QuickActionsButton(
-                    api: api,
-                    buttonAction: (() {
-                      String model2Send = figureProvider.getModel2Send();
-                      print(model2Send);
-                      api.setConfiguration(model2Send);
-                    }),
+            Container(
+              margin: const EdgeInsets.symmetric(
+                vertical: 5.0,
+                horizontal: 15.0,
+              ),
+              child: Row(
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: QuickActionsButton(
+                      api: api,
+                      figureProvider: figureProvider,
+                    ),
                   ),
-                ),
-                Flexible(
-                  flex: 2,
-                  child: ApplyButton(
-                    api: api,
-                    buttonAction: (() {
-                      String model2Send = figureProvider.getModel2Send();
-                      print(model2Send);
-                      api.setConfiguration(model2Send);
-                    }),
+                  Flexible(
+                    flex: 2,
+                    child: ApplyButton(
+                      api: api,
+                      buttonAction: (() {
+                        String model2Send = figureProvider.getModel2Send();
+                        print(model2Send);
+                        api.setConfiguration(model2Send);
+                      }),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         );
